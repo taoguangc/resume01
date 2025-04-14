@@ -1,0 +1,47 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { Icon } from 'astro-icon/components'
+
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'borderless'
+type ButtonSize = 'base' | 'lg'
+
+type CommonProps = {
+  variant?: ButtonVariant
+  size?: ButtonSize
+  icon?: string
+}
+
+type ButtonProps = HTMLAttributes<'button'> & CommonProps & { href?: never }
+type AnchorProps = HTMLAttributes<'a'> & CommonProps & { href: string }
+type Props = ButtonProps | AnchorProps
+
+const { href, class: className, variant = 'primary', size = 'base', icon = 'write', ...rest } = Astro.props
+
+const baseStyles = {
+  primary: 'bg-primary text-white hover:brightness-[0.95]',
+  secondary: 'bg-white text-gray-500 hover:brightness-[0.95]',
+  outline: 'bg-white text-gray-900 border border-gray-800 hover:brightness-[0.95]',
+  borderless: 'bg-white text-gray-900'
+}
+
+const sizeStyles = {
+  base: 'px-4 py-2.5 text-sm/[1.5]',
+  lg: 'px-6 py-3 text-lg'
+}
+
+const commonStyles = ['inline-flex items-center gap-2 rounded-xl transition-colors duration-200', baseStyles[variant], sizeStyles[size], className]
+---
+
+{
+  href ? (
+    <a href={href} class:list={[...commonStyles, 'group']} {...rest}>
+      {icon && <Icon name={icon} class="h-4 w-4" />}
+      <slot />
+    </a>
+  ) : (
+    <button class:list={[...commonStyles, 'group']} {...(rest as HTMLAttributes<'button'>)}>
+      {icon && <Icon name={icon} class="h-4 w-4" />}
+      <slot />
+    </button>
+  )
+}

@@ -1,0 +1,49 @@
+---
+import { Image } from 'astro:assets'
+import { getImage } from '@utils/image'
+import Slider from '@components/ui/Slider.astro'
+
+interface Props {
+  headline?: string
+  text?: string
+  cover?: string
+  video?: string
+  sliders?: Array<{
+    title?: string
+    description?: string
+    icon?: string
+  }>
+}
+
+const { headline = '', text = '', cover = '', video = '', sliders = [] } = Astro.props
+
+const processedImage = cover ? await getImage(cover) : null
+---
+
+<section class="bg-white py-16 md:py-20">
+  <div class="container mx-auto flex flex-col gap-8 px-4 md:flex-row">
+    <div class="md:w-1/2">
+      {
+        processedImage && (
+          <Image
+            src={processedImage}
+            alt={headline ?? ''}
+            width="600"
+            height="600"
+            class="aspect-square w-full rounded-2xl object-cover content-visibility-auto"
+            fetchpriority="high"
+            decoding="sync"
+          />
+        )
+      }
+    </div>
+
+    <div class="flex flex-col rounded-2xl bg-gray p-6 md:w-1/2">
+      <h2 class="mb-4 text-3xl font-semibold md:text-4xl/12">{headline}</h2>
+      <h3 class="mb-8 text-gray-500">{text}</h3>
+      <div class="mt-8 w-full">
+        <Slider sliders={sliders} />
+      </div>
+    </div>
+  </div>
+</section>

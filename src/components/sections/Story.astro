@@ -1,0 +1,85 @@
+---
+import { Image } from 'astro:assets'
+import { getImage } from '@utils/image'
+import Button from '@components/ui/Button.astro'
+
+type Props = Partial<{
+  title: string
+  text: string
+  buttonTitle: string
+  buttonHref: string
+  cardTitle: string
+  cardText: string
+  bigImage: string
+  smallImage: string
+}>
+
+const props = Astro.props as Props
+
+// 统一处理所有图片
+const processImages = async (images: (string | undefined)[]) => {
+  return Promise.all(images.map((img) => (img ? getImage(img) : null)))
+}
+
+const [processedBigImage, processedSmallImage] = await processImages([props.bigImage, props.smallImage])
+---
+
+<section class="bg-white py-8 md:py-12">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col gap-8 md:grid-cols-[1fr-auto] md:flex-row md:justify-between md:gap-x-16 md:gap-y-6">
+      <div class="min-w-96">
+        <div class="mb-3 flex items-center gap-2">
+          <div class="h-2 w-2 rounded-full bg-primary"></div>
+          <h3 class="text-sm text-primary">Story</h3>
+        </div>
+        <hr class="mb-6 w-48 rounded border-2 border-primary" />
+      </div>
+
+      <!-- Right Column - Text and Link -->
+      <div>
+        <h2 class="mb-8 text-3xl font-semibold md:text-4xl" data-in="wordFade">{props.title}</h2>
+        <h3 class="mb-8 text-gray-500">{props.text}</h3>
+        <Button href={props.buttonHref} showIcon={false} class="mb-12">{props.buttonTitle}</Button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-y-4 md:grid-cols-3 md:gap-4">
+      <div class="col-span-2">
+        {
+          processedBigImage && (
+            <Image
+              src={processedBigImage}
+              alt={props.title || 'Story big image'}
+              width="960"
+              height="600"
+              class="h-auto w-full rounded-2xl object-cover content-visibility-auto"
+              loading="eager"
+              fetchpriority="high"
+              decoding="sync"
+            />
+          )
+        }
+      </div>
+      <div class="flex flex-col gap-4">
+        <div class="h-full rounded-xl bg-primary p-8 text-white">
+          <h3 class="mb-4 text-xl font-bold">{props.cardTitle}</h3>
+          <p class="text-lg/[1.6] opacity-80">{props.cardText}</p>
+        </div>
+        {
+          processedSmallImage && (
+            <Image
+              src={processedSmallImage}
+              alt={props.cardTitle || 'Story small image'}
+              width="480"
+              height="270"
+              class="h-full w-full rounded-2xl object-cover content-visibility-auto"
+              loading="eager"
+              fetchpriority="high"
+              decoding="sync"
+            />
+          )
+        }
+      </div>
+    </div>
+  </div>
+</section>

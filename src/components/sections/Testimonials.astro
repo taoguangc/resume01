@@ -1,0 +1,106 @@
+---
+import { Image } from 'astro:assets'
+import { getImage } from '@utils/image'
+import { Icon } from 'astro-icon/components'
+
+interface Props {
+  title?: string
+  subTitle?: string
+  customers?: {
+    name?: string
+    job?: string
+    avatar?: string
+    testimonial?: string
+  }[]
+}
+
+const { title = '', subTitle = '', customers = [] } = Astro.props
+
+// 统一处理所有图片
+const processImages = async (images: (string | undefined)[]) => {
+  return Promise.all(images.map((img) => (img ? getImage(img) : null)))
+}
+
+const processedAvatars = await processImages(customers.map((customer) => customer.avatar))
+---
+
+<section class="bg-gray pt-20">
+  <div class="container mx-auto flex flex-col px-4">
+    <div class="text-center">
+      <h2 class="mb-6 text-4xl font-bold" data-in="wordFade">{title}</h2>
+      <h3 class="mb-12 text-base text-gray-500">{subTitle}</h3>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 [mask-image:linear-gradient(black_80%,transparent)] md:grid-cols-3">
+      <div class="mt-8">
+        {
+          customers.slice(0, 4).map((customer, index) => (
+            <div class="relative mb-4 rounded-lg bg-white p-8">
+              <div class="mb-4 h-12 w-12 overflow-hidden rounded-full">
+                {processedAvatars[index] && (
+                  <Image
+                    src={processedAvatars[index]}
+                    alt={customer.name || 'Customer avatar'}
+                    width={48}
+                    height={48}
+                    class="h-full w-full object-cover object-center"
+                  />
+                )}
+              </div>
+              <Icon name="quote" size={28} class="absolute right-8 top-8 text-primary" />
+              <h4 class="font-semibold">{customer.name}</h4>
+              <h5 class="text-sm text-gray-600">{customer.job}</h5>
+              <p class="mb-8 text-gray-600">"{customer.testimonial}"</p>
+            </div>
+          ))
+        }
+      </div>
+      <div class="hidden md:block" data-parallax>
+        {
+          customers.slice(4, 8).map((customer, index) => (
+            <div class="relative mb-4 rounded-lg bg-white p-8">
+              <div class="mb-4 h-12 w-12 overflow-hidden rounded-full">
+                {processedAvatars[index + 4] && (
+                  <Image
+                    src={processedAvatars[index + 4]!}
+                    alt={customer.name || 'Customer avatar'}
+                    width={48}
+                    height={48}
+                    class="h-full w-full object-cover object-center"
+                  />
+                )}
+              </div>
+              <Icon name="quote" size={28} class="absolute right-8 top-8 text-primary" />
+              <h4 class="font-semibold">{customer.name}</h4>
+              <h5 class="text-sm text-gray-600">{customer.job}</h5>
+              <p class="mb-8 text-gray-600">"{customer.testimonial}"</p>
+            </div>
+          ))
+        }
+      </div>
+      <div class="mt-8 hidden md:block">
+        {
+          customers.slice(8, 12).map((customer, index) => (
+            <div class="relative mb-4 rounded-lg bg-white p-8">
+              <div class="mb-4 h-12 w-12 overflow-hidden rounded-full">
+                {processedAvatars[index + 8] ? (
+                  <Image
+                    src={processedAvatars[index + 8]!}
+                    alt={customer.name || 'Customer avatar'}
+                    width={48}
+                    height={48}
+                    class="h-full w-full object-cover object-center"
+                  />
+                ) : null}
+              </div>
+              <Icon name="quote" size={28} class="absolute right-8 top-8 text-primary" />
+              <h4 class="font-semibold">{customer.name}</h4>
+              <h5 class="text-sm text-gray-600">{customer.job}</h5>
+              <p class="mb-8 text-gray-600">"{customer.testimonial}"</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

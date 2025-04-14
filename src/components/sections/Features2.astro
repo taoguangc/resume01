@@ -1,0 +1,138 @@
+---
+import { Image } from 'astro:assets'
+import { getImage } from '@utils/image'
+import { Icon } from 'astro-icon/components'
+import VideoModal from '@components/ui/VideoModal.astro'
+
+type Props = Partial<{
+  title: string
+  text: string
+  showMember: boolean
+  title1: string
+  text1: string
+  image: string
+  title2: string
+  text2: string
+  cover: string
+  video: string
+}>
+
+const props = Astro.props as Props
+
+// 统一处理所有图片
+const processImages = async (images: (string | undefined)[]) => {
+  return Promise.all(images.map((img) => (img ? getImage(img) : null)))
+}
+
+const [processedImage, processedCover] = await processImages([props.image, props.cover])
+---
+
+<section class="bg-white py-8 md:py-16">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-[2fr_1fr_1fr]">
+      <!-- Left Column - Title -->
+      <div class="flex flex-col justify-between gap-4">
+        <div>
+          <div class="mb-3 flex items-center gap-2">
+            <div class="h-2 w-2 rounded-full bg-primary"></div>
+            <h2 class="text-sm text-primary">Features</h2>
+          </div>
+          <hr class="mb-6 w-48 rounded border-2 border-primary" />
+          <h3 class="text-3xl font-semibold md:text-4xl" data-in="wordFade">{props.title}</h3>
+        </div>
+        <p class="mb-6 text-gray-600">{props.text}</p>
+      </div>
+
+      <!-- Right Column - Text and Link -->
+      <div class="flex flex-col gap-4">
+        <div class="overflow-hidden rounded-2xl">
+          {
+            processedImage && (
+              <Image
+                src={processedImage}
+                alt={props.title || 'features image 1'}
+                width="300"
+                height="400"
+                class="h-full w-full object-cover content-visibility-auto"
+                loading="eager"
+                fetchpriority="high"
+                decoding="sync"
+              />
+            )
+          }
+        </div>
+        <div class="rounded-xl bg-gray p-6">
+          <h3 class="mb-4 text-2xl font-bold">{props.title1}</h3>
+          <p class="pb-6 opacity-60">{props.text1}</p>
+        </div>
+      </div>
+
+      <!-- Cards Grid -->
+      <div class="flex flex-col gap-4">
+        <div class="rounded-xl bg-primary p-6 text-white">
+          <h3 class="mb-4 text-2xl font-bold">{props.title2}</h3>
+          <p class="pb-6 opacity-80">{props.text2}</p>
+        </div>
+        <div class="rounded-2xl">
+          <div class="relative">
+            <div
+              class="group absolute inset-0 z-50 flex cursor-pointer items-center justify-center rounded-2xl transition-all duration-500 hover:bg-black/30"
+              data-video-trigger
+              data-video-id={props.video || ''}
+            >
+              <div class="flex flex-row items-center transition-all duration-500 group-hover:-translate-x-10">
+                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-white">
+                  <Icon name="play" size={24} class="text-primary" />
+                </div>
+                <div
+                  class="group-hover:max-w-auto max-w-0 whitespace-nowrap text-white opacity-0 transition-all duration-500 group-hover:pl-3 group-hover:opacity-100"
+                >
+                  Play Videos
+                </div>
+              </div>
+            </div>
+            {
+              processedCover && (
+                <Image
+                  src={processedCover}
+                  alt={props.title || 'features cover'}
+                  width="300"
+                  height="400"
+                  class="overflow-hidden rounded-2xl object-cover content-visibility-auto"
+                  loading="eager"
+                  fetchpriority="high"
+                  decoding="sync"
+                />
+              )
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<VideoModal videoId={props.video || ''} />
+
+<script>
+  let isModalOpen = false
+  const videoTrigger = document.querySelector('[data-video-trigger]') as HTMLElement | null
+  const videoModal = document.querySelector('[data-video-modal]') as HTMLElement | null
+  const videoId = videoTrigger?.getAttribute('data-video-id')
+
+  videoTrigger?.addEventListener('click', () => {
+    isModalOpen = true
+    videoModal?.classList.remove('invisible')
+
+    // 触发自定义事件，传递视频ID
+    const event = new CustomEvent('show-video-modal', {
+      detail: { videoId }
+    })
+    document.dispatchEvent(event)
+  })
+
+  document.addEventListener('close-video-modal', () => {
+    isModalOpen = false
+    videoModal?.classList.add('invisible')
+  })
+</script>

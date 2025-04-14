@@ -1,0 +1,166 @@
+---
+import { Image } from 'astro:assets'
+import { getImage } from '@utils/image'
+import NavLink from './NavLink.astro'
+import siteConfig from '@data/global/index.json'
+import Button from '@components/ui/Button.astro'
+
+const navLinks = siteConfig.navLinks || []
+const logo = siteConfig.logo
+
+// 如果 logo 路径以 /src 开头，则直接使用，否则添加 /src 前缀
+const processedImage = logo ? await getImage(logo) : null
+---
+
+<header class="fixed top-0 z-80 w-full p-6 text-content antialiased md:mt-6 md:px-4" data-in="fadeDown">
+  <div class="container rounded-xl bg-white p-1 shadow-[0_6px_12px_0_rgba(29,29,38,0.04)] md:border md:border-gray-300/50">
+    <div class="flex w-full flex-row items-center justify-between">
+      <a
+        class="mr-auto flex flex-row items-center overflow-hidden rounded-xl shadow-[inset_0_0_0_2px_rgba(0,0,0,0.9)] md:mr-0"
+        href="/"
+        aria-label={`Back to ${siteConfig.title} homepage`}
+      >
+        {processedImage && <Image src={processedImage} alt={`${siteConfig.title} logo`} width="40" height="40" class="h-10 w-auto" />}
+      </a>
+
+      <nav class="hidden md:block">
+        {
+          navLinks.length > 0 && (
+            <ul class="flex md:flex-row">
+              {navLinks.map((link) => (
+                <li class="relative h-full overflow-hidden">
+                  <NavLink
+                    class="inline-flex h-full w-full items-center rounded-lg px-3 font-medium hover:bg-gray-50 md:text-sm/10"
+                    href={link.href}
+                    aria-label={`Visit ${link.text} page`}
+                  >
+                    {link.text}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </nav>
+      <div class="hidden md:block">
+        <Button href="/contact" icon="write" aria-label="Contact us for more information">Contact Me</Button>
+      </div>
+      <button
+        id="hamburger-button"
+        class="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gray-900 p-2 md:hidden"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <span class="sr-only">Toggle navigation menu</span>
+        <div class="hamburger-bars text-white">
+          <div class="bar" aria-hidden="true"></div>
+          <div class="bar" aria-hidden="true"></div>
+          <div class="bar" aria-hidden="true"></div>
+        </div>
+      </button>
+    </div>
+  </div>
+  <nav
+    class="max-h-0 overflow-hidden text-gray-900 shadow-[0_6px_12px_0_rgba(29,29,38,0.04)] transition-all duration-300 ease-in-out"
+    id="mobile-menu"
+    aria-label="Mobile navigation"
+  >
+    {
+      navLinks.length > 0 && (
+        <ul class="my-2 flex flex-col rounded-xl bg-white py-2 md:flex-row" role="menu">
+          {navLinks.map((link) => (
+            <li class="px-6 py-2" role="none">
+              <NavLink
+                class="group relative inline-block overflow-hidden font-medium md:text-base"
+                href={link.href}
+                role="menuitem"
+                aria-label={`Visit ${link.text} page`}
+              >
+                <span class="inline-block transition-transform duration-300 group-hover:[transform:translate(-0.25rem,-100%)]">{link.text}</span>
+                <span class="absolute top-0 left-0 [transform:translate(-0.25rem,100%)] text-primary transition-transform duration-300 group-hover:[transform:translate(0,0)]">
+                  {link.text}
+                </span>
+              </NavLink>
+            </li>
+          ))}
+          <li class="px-6 py-2" role="none">
+            <Button href="/contact" icon="write" role="menuitem" aria-label="Contact us for more information">
+              Contact Me
+            </Button>
+          </li>
+        </ul>
+      )
+    }
+  </nav>
+</header>
+
+<style>
+  .hamburger-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .bar {
+    width: 16px;
+    height: 2px;
+    background-color: white;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  #hamburger-button.open .hamburger-bars .bar:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+    height: 1.5px;
+  }
+
+  #hamburger-button.open .hamburger-bars .bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  #hamburger-button.open .hamburger-bars .bar:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+    height: 1.5px;
+  }
+</style>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const initHamburgerMenu = (): void => {
+      const hamburgerButton: HTMLElement | null = document.getElementById('hamburger-button')
+      const mobile: HTMLElement | null = document.getElementById('mobile-menu')
+      if (!hamburgerButton || !mobile) return
+
+      // 抽取关闭菜单逻辑为独立函数
+      const closeMenu = (): void => {
+        hamburgerButton.classList.remove('open')
+        hamburgerButton.setAttribute('aria-expanded', 'false')
+        mobile.classList.remove('max-h-svh')
+        mobile.classList.add('max-h-0')
+      }
+
+      const toggleMenu = (): void => {
+        hamburgerButton.classList.toggle('open')
+        const isOpen: boolean = hamburgerButton.classList.contains('open')
+        hamburgerButton.setAttribute('aria-expanded', isOpen.toString())
+
+        if (isOpen) {
+          mobile.classList.remove('max-h-0')
+          mobile.classList.add('max-h-svh')
+        } else {
+          closeMenu()
+        }
+      }
+
+      hamburgerButton.addEventListener('click', toggleMenu)
+
+      // 为移动菜单中的所有链接添加点击事件
+      const menuLinks = mobile.getElementsByTagName('a')
+      Array.from(menuLinks).forEach((link) => {
+        link.addEventListener('click', closeMenu)
+      })
+    }
+
+    initHamburgerMenu()
+  })
+</script>

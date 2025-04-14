@@ -1,0 +1,72 @@
+---
+import type { GetStaticPathsOptions, Page } from 'astro'
+import { type CollectionEntry, getCollection } from 'astro:content'
+import siteConfig from '@data/global/index.json'
+import Layout from '@layouts/Layout.astro'
+import PostPreview from '@components/sections/PostPreview.astro'
+import { Icon } from 'astro-icon/components'
+import Button from '@components/ui/Button.astro'
+import { sortPostsByDateDesc } from '@utils/post-utils'
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const posts = (await getCollection('blog')).sort(sortPostsByDateDesc)
+  return paginate(posts, { pageSize: siteConfig.postsPerPage || 5 })
+}
+
+const { page } = Astro.props as { page: Page<CollectionEntry<'blog'>> }
+const blog = page.data
+---
+
+<Layout title="Ovidius Blog" description="Get all the latest news from Ovidius" image={{ src: '/ovidius-preview.jpg', alt: 'The preview of the site' }}>
+  <main class="container px-4 py-16">
+    <div class="mx-auto">
+      <div class="mb-3 flex items-center gap-2">
+        <div class="h-2 w-2 rounded-full bg-primary"></div>
+        <h3 class="text-sm text-primary">Blog</h3>
+      </div>
+      <hr class="mb-6 w-48 rounded border-2 border-primary" />
+      <div class="md:flex-raw mb-12 flex flex-col justify-between md:items-end">
+        <div>
+          <h2 class="text-3xl font-semibold text-slate-900 md:text-4xl" data-in="wordFade">Explore Our Latest Articles</h2>
+          <p class="mt-6 mb-10 max-w-2xl text-base text-slate-500">
+            Stay informed with the latest health trends, expert advice, and wellness tips through our comprehensive blog.
+          </p>
+        </div>
+
+        <Button href="#explore" variant={'borderless'}>Scroll To Explore</Button>
+      </div>
+      <div class="grid gap-4 md:grid-cols-3" id="explore">
+        {blog.map((post) => <PostPreview post={post} />)}
+      </div>
+      <nav aria-label="Pagination" class="mx-auto my-12 w-full border-t border-slate-200 pt-12 sm:my-16 sm:pt-16">
+        <div class="relative px-12 text-center">
+          {
+            page.url.prev && (
+              <a
+                class="hover:shadow-button absolute top-1/2 left-0 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-slate-50 text-lg text-slate-700 transition duration-300 hover:bg-primary hover:text-white"
+                href={page.url.prev}
+                rel="prefetch"
+                aria-label={`Go to page ${page.currentPage - 1} of ${page.lastPage}`}
+              >
+                <Icon name="arrow-left" class="h-5 w-5 fill-current" />
+              </a>
+            )
+          }
+          <span class="text-sm tracking-wider text-slate-500 uppercase" aria-current="page">Page {page.currentPage} of {page.lastPage}</span>
+          {
+            page.url.next && (
+              <a
+                class="hover:shadow-button absolute top-1/2 right-0 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-slate-50 text-lg text-slate-700 transition duration-300 hover:bg-primary hover:text-white"
+                href={page.url.next}
+                rel="prefetch"
+                aria-label={`Go to page ${page.currentPage + 1} of ${page.lastPage}`}
+              >
+                <Icon name="arrow-right" class="h-5 w-5 fill-current" />
+              </a>
+            )
+          }
+        </div>
+      </nav>
+    </div>
+  </main>
+</Layout>

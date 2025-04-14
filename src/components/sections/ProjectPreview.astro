@@ -1,0 +1,19 @@
+---
+import { type CollectionEntry } from 'astro:content'
+
+const { project } = Astro.props as { project: CollectionEntry<'projects'> }
+const { title, description } = project.data
+---
+
+<article class="grid grid-cols-3">
+  <div class="post-card-header">
+    {
+      title && (
+        <h2 class="text-3xl font-bold text-slate-900">
+          <a href={`/projects/${project.id}/`}>{title}</a>
+        </h2>
+      )
+    }
+    {description && <div class="mt-1 text-sm leading-normal">{description}</div>}
+  </div>
+</article>

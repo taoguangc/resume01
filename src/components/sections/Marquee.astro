@@ -1,0 +1,47 @@
+---
+import { Icon } from 'astro-icon/components'
+
+interface Props {
+  items?: { title: string; icon?: string; link?: string }[]
+}
+
+const { items = [] } = Astro.props
+
+const getIconName = (path: string = '') => {
+  return path.split('/').pop()?.replace('.svg', '') || ''
+}
+---
+
+<section class="mx-6 overflow-hidden rounded-xl border border-neutral-200 bg-white md:mx-0" data-in="zoomIn">
+  <div class="flex items-center justify-center border-b border-b-neutral-200 text-xs/14 text-content">
+    <h4 class="font-medium">Worked With</h4>
+  </div>
+  <div class="flex py-8 text-neutral-400">
+    <div class="flex animate-marquee items-center gap-x-8 pr-8 whitespace-nowrap">
+      {
+        items.map((item) => (
+          <>
+            {item.link ? (
+              <a href={item.link}>{item.icon && <Icon name={getIconName(item.icon)} title={item.title} class="h-6 w-auto" />}</a>
+            ) : (
+              <div>{item.icon && <Icon name={getIconName(item.icon)} title={item.title} class="h-6 w-auto" />}</div>
+            )}
+          </>
+        ))
+      }
+    </div>
+    <div class="flex animate-marquee items-center gap-x-8 pr-8 whitespace-nowrap">
+      {
+        items.map((item) => (
+          <>
+            {item.link ? (
+              <a href={item.link}>{item.icon && <Icon name={getIconName(item.icon)} title={item.title} class="h-6 w-auto" />}</a>
+            ) : (
+              <div>{item.icon && <Icon name={getIconName(item.icon)} title={item.title} class="h-6 w-auto" />}</div>
+            )}
+          </>
+        ))
+      }
+    </div>
+  </div>
+</section>

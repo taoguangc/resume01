@@ -1,0 +1,45 @@
+{
+  "colors": {
+    "primary": "#1D1D26",
+    "secondary": "#F9F9F9",
+    "surface": "#F9F9F9",
+    "content": "#77777D"
+  },
+  "fonts": {
+    "sans": [
+      "Inter",
+      "system-ui",
+      "sans-serif"
+    ],
+    "serif": [
+      "Georgia",
+      "Cambria",
+      "Times New Roman",
+      "Times",
+      "serif"
+    ]
+  },
+  "letterSpacing": {
+    "tight": "-0.04em"
+  },
+  "container": {
+    "center": true,
+    "screens": {
+      "sm": "640px",
+      "md": "720px",
+      "lg": "",
+      "xl": ""
+    }
+  },
+  "spacing": {
+    "sm": "0.5rem",
+    "md": "1rem",
+    "lg": "2rem",
+    "xs": "0.25rem"
+  },
+  "typography": {
+    "fontFamily": "Inter, system-ui, -apple-system, sans-serif",
+    "fontSize": "16px",
+    "lineHeight": "1.5"
+  }
+}

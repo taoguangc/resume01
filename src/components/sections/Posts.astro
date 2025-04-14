@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content'
+import { sortItemsByDateDesc } from '@utils/data-utils'
+import PostPreview from '@components/sections/PostPreview.astro'
+import Button from '@components/ui/Button.astro'
+
+const posts = (await getCollection('blog')).sort(sortItemsByDateDesc)
+const featuredPosts = posts.filter(({ data }) => data.isFeatured)
+---
+
+{
+  featuredPosts?.length > 0 && (
+    <section class="my-16 px-4 sm:my-24 md:px-0">
+      <div class="container mx-auto">
+        <h2 class="mb-12 text-xl sm:mb-16 sm:text-2xl">{Astro.props.title}</h2>
+        <div class="grid gap-8 sm:grid-cols-2 sm:gap-12 lg:grid-cols-3">
+          {featuredPosts.map((post) => (
+            <PostPreview post={post} class="mb-10 sm:mb-12" headingLevel="h3" />
+          ))}
+        </div>
+        <div class="mt-12 sm:mt-16">
+          <Button href="/blog">View All Posts</Button>
+        </div>
+      </div>
+    </section>
+  )
+}

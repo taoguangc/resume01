@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro'
+import siteConfigData from '../data/global/index.json'
+import homeData from '../data/home/index.json'
+import Button from '../components/ui/Button.astro'
+
+const siteConfig = siteConfigData
+const { title, subtitle, buttons, sections } = homeData
+
+// 动态导入所有section组件
+const modules = await import.meta.glob('../components/sections/*.astro', { eager: true })
+const SECTION_COMPONENTS = Object.fromEntries(
+  Object.entries(modules).map(([path, module]) => {
+    const componentName = path.match(/[\\/]([^\\/]+)\.astro$/)?.[1] || ''
+    return [componentName, (module as any).default]
+  })
+)
+---
+
+<Layout description={siteConfig.description} image={siteConfig.image}>
+  <div class="container mx-auto mt-24 px-4 py-16 text-center md:mt-0" data-in="fadeUp" id="home">
+    <div class="mb-6 inline-flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-3 py-1 text-xs text-content">
+      <span class="h-2 w-2 animate-pulse rounded-full border-2 border-green-200 bg-green-500"></span>
+      Available for Work
+    </div>
+    {title && <h1 class="mb-4 text-3xl font-medium md:text-5xl">{title}</h1>}
+    {subtitle && <p class="mb-8 text-lg text-content">{subtitle}</p>}
+    {
+      buttons && buttons.length > 0 && (
+        <div class="flex justify-center gap-4">
+          {buttons.map((button) => (
+            <Button href={button.link} icon={button.icon} variant={button.style}>
+              {button.title}
+            </Button>
+          ))}
+        </div>
+      )
+    }
+  </div>
+  {
+    sections?.map((section) => {
+      const Component = SECTION_COMPONENTS[section._template]
+      return Component ? <Component {...section} /> : null
+    })
+  }
+</Layout>

@@ -1,0 +1,52 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content'
+import { type Image } from '@data/global/index.json'
+import Layout from '@layouts/Layout.astro'
+import { sortPostsByDateDesc } from '@utils/post-utils'
+
+export async function getStaticPaths() {
+  const projects = (await getCollection('projects')).sort(sortPostsByDateDesc)
+  return projects.map((project) => ({
+    params: { id: project.id },
+    props: { project }
+  }))
+}
+
+const { project } = Astro.props as { project: CollectionEntry<'projects'> }
+const { title, description, featureImage, seo } = project.data
+const { Content } = await render(project)
+let socialImage: Image | undefined
+if (featureImage?.src) {
+  socialImage = featureImage
+}
+if (seo?.image?.src) {
+  socialImage = seo.image
+}
+---
+
+<Layout title={seo?.title ?? title} description={seo?.description ?? description} image={socialImage} pageType="article">
+  <main class="grow px-4 py-12 sm:px-8 sm:py-16">
+    <article class="mx-auto mb-12 max-w-6xl sm:mb-16">
+      <header class="mx-auto mb-6 max-w-3xl sm:mb-8">
+        <h1 class="text-3xl font-bold text-slate-900 sm:text-4xl md:text-5xl">{title}</h1>
+        {description && <p class="mt-4 text-lg text-slate-600">{description}</p>}
+      </header>
+      {
+        featureImage?.src && (
+          <figure class="mx-auto my-6 sm:my-8 lg:my-12">
+            <img class="w-full rounded-lg" src={featureImage.src} loading="lazy" decoding="async" alt={featureImage.alt || ''} />
+            {featureImage.caption && <figcaption class="mt-1.5 text-xs sm:text-sm">{featureImage.caption}</figcaption>}
+          </figure>
+        )
+      }
+      <div class="mx-auto max-w-3xl">
+        <div class="prose max-w-none prose-slate sm:prose-lg">
+          <Content />
+        </div>
+      </div>
+    </article>
+    <div class="mx-auto max-w-3xl text-center">
+      <a href="/projects" class="inline-block rounded-md bg-slate-100 px-6 py-3 transition-colors hover:bg-primary hover:text-white"> ← Back to Projects </a>
+    </div>
+  </main>
+</Layout>

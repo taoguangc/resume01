@@ -1,0 +1,165 @@
+{
+  "title": "Thomas Scott",
+  "subtitle": "Senior Data Scientist & Business Consultant",
+  "buttons": [
+    {
+      "title": "Send Email",
+      "icon": "email",
+      "link": "mailto:mail@gmail.com",
+      "style": "primary"
+    },
+    {
+      "title": "Download CV",
+      "icon": "download",
+      "link": "https://drive.google.com",
+      "style": "secondary"
+    }
+  ],
+  "sections": [
+    {
+      "icon": "/src/assets/icons/user.svg",
+      "title": "Professional Profile",
+      "content": "Accomplished Senior Data Scientist & Business Consultant with a proven track record of leveraging advanced analytics to drive strategic decision-making and optimize business processes.\n Demonstrated expertise in developing innovative solutions to complex problems, coupled with exceptional communication skills to effectively convey insights to stakeholders at all levels.",
+      "image": "/src/assets/profile.avif",
+      "location": "Based in Phoenix, Arizona, USA.",
+      "_template": "Profile"
+    },
+    {
+      "items": [
+        {
+          "title": "Logo01",
+          "icon": "/src/assets/icons/logo-01.svg",
+          "link": "https://www.google.com"
+        },
+        {
+          "title": "Logo02",
+          "icon": "/src/assets/icons/logo-02.svg",
+          "link": "https://www.google.com"
+        },
+        {
+          "title": "Logo03",
+          "icon": "/src/assets/icons/logo-03.svg",
+          "link": "https://www.google.com"
+        },
+        {
+          "title": "Logo04",
+          "icon": "/src/assets/icons/logo-04.svg",
+          "link": "https://www.google.com"
+        },
+        {
+          "title": "Logo05",
+          "icon": "/src/assets/icons/logo-05.svg",
+          "link": "https://www.google.com"
+        }
+      ],
+      "_template": "Marquee"
+    },
+    {
+      "title": "Work Experience",
+      "desc": "Proven track record in data science and business consulting, delivering impactful insights and results across industries.",
+      "items": [
+        {
+          "title": "Data Scientist & Business Consultant",
+          "company": "TechNova",
+          "employmentType": " Full-Time",
+          "location": "Based in Phoenix, Arizona, USA.",
+          "startDate": "2024-06-05T16:00:00.000Z",
+          "description": "Demonstrating a seamless integration of data science acumen and business consulting proficiency, effectively driving transformative initiatives and delivering strategic insights to optimize organizational performance and facilitate informed decision-making."
+        },
+        {
+          "title": " Data Analyst & Business Strategist",
+          "company": "SwiftEdge",
+          "employmentType": "Contract",
+          "location": "Dallas, Texas, USA",
+          "startDate": "2023-04-30T16:00:00.000Z",
+          "endDate": "2024-02-28T16:00:00.000Z",
+          "description": "Skillfully combining data analysis proficiency with strategic business acumen, adeptly navigating complex datasets to inform strategic decision-making and drive organizational growth initiatives."
+        }
+      ],
+      "_template": "Experience"
+    },
+    {
+      "title": "Education",
+      "desc": "Degrees and certifications in the specialized fields of data science and business analytics.",
+      "items": [
+        {
+          "school": "Princeton University",
+          "degree": "Master's degree",
+          "fieldOfStudy": "Data Science",
+          "startDate": "2015-06-19T16:00:00.000Z",
+          "endDate": "2019-06-19T16:00:00.000Z"
+        },
+        {
+          "school": "Montclair State University",
+          "degree": "Bachelor's degree",
+          "fieldOfStudy": "Artificial Intelligence",
+          "startDate": "2011-08-31T16:00:00.000Z",
+          "endDate": "2015-06-29T16:00:00.000Z"
+        }
+      ],
+      "_template": "Education"
+    },
+    {
+      "title": "Professional Skills",
+      "desc": "Key competencies essential for navigating and excelling in various professional contexts.",
+      "categories": [
+        {
+          "category": "Data Science",
+          "skills": [
+            {
+              "skill": "Data Analysis"
+            },
+            {
+              "skill": "Machine Learning"
+            },
+            {
+              "skill": "Statistical Modeling"
+            },
+            {
+              "skill": "Data Visualization"
+            },
+            {
+              "skill": "Big Data Analytics"
+            },
+            {
+              "skill": "Predictive Modeling"
+            },
+            {
+              "skill": "Deep Learning"
+            },
+            {
+              "skill": "Data Mining"
+            },
+            {
+              "skill": "Statistical Inference"
+            },
+            {
+              "skill": "Hypothesis Testing"
+            },
+            {
+              "skill": "Data Cleaning"
+            }
+          ]
+        },
+        {
+          "category": "Business Consultation",
+          "skills": [
+            {
+              "skill": "Strategic Planning"
+            },
+            {
+              "skill": "Business Analysis"
+            },
+            {
+              "skill": "Market Research"
+            },
+            {
+              "skill": "Financial Analysis"
+            }
+          ]
+        }
+      ],
+      "_template": "Skills"
+    }
+  ]
+}

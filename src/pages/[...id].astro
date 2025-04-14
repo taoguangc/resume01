@@ -1,0 +1,68 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content'
+// 定义 Image 类型接口
+interface Image {
+  src: string
+  alt?: string
+  caption?: string
+}
+import Layout from '../layouts/Layout.astro'
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages')
+  return pages.map((page) => {
+    return {
+      params: { id: page.id },
+      props: { page }
+    }
+  })
+}
+
+const { page } = Astro.props as { page: CollectionEntry<'pages'> }
+// 从 page.data 中解构需要的属性，并使用可选链操作符确保 sections 存在
+const { title, featureImage, seo } = page.data
+// 使用类型断言确保 sections 属性存在，如果不存在则返回空数组
+const sections = (page.data as any).sections ?? []
+const { Content } = await render(page)
+let socialImage: Image | undefined
+if (featureImage?.src) {
+  socialImage = featureImage
+}
+if (seo?.image?.src) {
+  socialImage = seo.image
+}
+
+// 动态导入所有section组件
+const modules = await import.meta.glob('../components/sections/*.astro', { eager: true })
+const SECTION_COMPONENTS = Object.fromEntries(
+  Object.entries(modules).map(([path, module]) => {
+    const componentName = path.match(/[\\/]([^\\/]+)\.astro$/)?.[1] || ''
+    return [componentName, (module as any).default]
+  })
+)
+---
+
+<Layout title={seo?.title ?? title} description={seo?.description} image={socialImage}>
+  {
+    !sections || sections.length === 0 ? (
+      <article class="bg-white py-8 md:py-12">
+        <div class="container mx-auto px-4">
+          <header class="mb-8">
+            <h1 class="text-center text-3xl font-bold text-slate-900 md:text-4xl">{title}</h1>
+          </header>
+          <div class="mx-auto prose max-w-3xl prose-slate lg:prose-lg">
+            <Content />
+          </div>
+        </div>
+      </article>
+    ) : null
+  }
+  {
+    sections &&
+      sections.length > 0 &&
+      sections.map((section: { _template: string; [key: string]: any }) => {
+        const Component = SECTION_COMPONENTS[section._template]
+        return Component ? <Component {...section} /> : null
+      })
+  }
+</Layout>

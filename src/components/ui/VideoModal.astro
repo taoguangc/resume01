@@ -1,0 +1,106 @@
+---
+interface Props {
+  videoId: string
+}
+
+const { videoId } = Astro.props
+---
+
+<div class="invisible fixed inset-0 z-50 flex items-center justify-center" data-video-modal>
+  <div class="fixed inset-0 bg-black/50 opacity-0 transition-opacity duration-300" data-modal-overlay></div>
+  <div class="relative w-full max-w-4xl scale-95 p-4 opacity-0 transition-all duration-300" data-modal-content>
+    <div class="relative aspect-video w-full overflow-hidden rounded-xl bg-black shadow-xl" style="z-index: 100;">
+      <div id="video-container" class="relative z-10 h-full w-full">
+        <iframe
+          id="youtube-iframe"
+          width="100%"
+          height="100%"
+          src=""
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen></iframe>
+      </div>
+      <button
+        type="button"
+        class="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70"
+        data-modal-close
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  class VideoModal {
+    private modal: HTMLElement | null
+    private overlay: HTMLElement | null
+    private content: HTMLElement | null
+    private iframe: HTMLIFrameElement | null
+    private closeBtn: HTMLElement | null
+
+    constructor() {
+      this.modal = document.querySelector('[data-video-modal]')
+      this.overlay = document.querySelector('[data-modal-overlay]')
+      this.content = document.querySelector('[data-modal-content]')
+      this.iframe = document.getElementById('youtube-iframe') as HTMLIFrameElement
+      this.closeBtn = document.querySelector('[data-modal-close]')
+
+      this.init()
+    }
+
+    private init() {
+      // 监听显示事件
+      document.addEventListener('show-video-modal', (event: Event) => {
+        const customEvent = event as CustomEvent
+        this.openModal(customEvent.detail?.videoId)
+      })
+
+      // 添加关闭事件监听
+      this.overlay?.addEventListener('click', () => this.closeModal())
+      this.closeBtn?.addEventListener('click', () => this.closeModal())
+
+      // 添加ESC键关闭
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') this.closeModal()
+      })
+    }
+
+    private openModal(videoId: string) {
+      if (!this.modal || !this.iframe || !videoId) return
+
+      const origin = window.location.origin
+      this.iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0&modestbranding=1&origin=${origin}`
+
+      this.modal.classList.remove('invisible')
+      requestAnimationFrame(() => {
+        this.overlay?.classList.add('opacity-100')
+        this.content?.classList.remove('scale-95', 'opacity-0')
+      })
+    }
+
+    private closeModal() {
+      if (!this.modal || !this.iframe) return
+
+      this.overlay?.classList.remove('opacity-100')
+      this.content?.classList.add('scale-95', 'opacity-0')
+
+      // 触发关闭事件
+      document.dispatchEvent(new CustomEvent('close-video-modal'))
+
+      // 延迟隐藏和清除视频
+      setTimeout(() => {
+        this.modal?.classList.add('invisible')
+        this.iframe!.src = ''
+      }, 300)
+    }
+  }
+
+  // 初始化视频模态框
+  new VideoModal()
+</script>

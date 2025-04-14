@@ -1,0 +1,42 @@
+---
+import { type CollectionEntry } from 'astro:content'
+import { Image } from 'astro:assets'
+import FormattedDate from '@components/ui/FormattedDate.astro'
+import { getImage } from '@utils/image'
+
+const { post } = Astro.props as { post: CollectionEntry<'blog'> }
+const { title, publishDate, updatedDate, featureImage } = post.data
+const processedImage = featureImage ? await getImage(featureImage.src) : null
+---
+
+<article class="mb-12 flex flex-col gap-x-8 gap-y-6 sm:flex-row">
+  <header class="grow">
+    <div class="mb-2 text-sm tracking-wider text-slate-500 uppercase">
+      <FormattedDate date={publishDate} />
+      {
+        updatedDate && (
+          <>
+            {' '}
+            <span>
+              (Updated on <FormattedDate date={updatedDate} />)
+            </span>
+          </>
+        )
+      }
+    </div>
+    <h3 class="text-2xl font-bold text-slate-900">
+      <a href={`/blog/${post.id}/`}>{title}</a>
+    </h3>
+  </header>
+  {
+    featureImage?.src && (
+      <figure class="shrink-0 sm:w-40">
+        <a href={`/blog/${post.id}/`}>
+          {processedImage && (
+            <Image src={processedImage} width="160" height="90" class="w-full rounded-md" alt={featureImage.alt || ''} loading="lazy" decoding="async" />
+          )}
+        </a>
+      </figure>
+    )
+  }
+</article>

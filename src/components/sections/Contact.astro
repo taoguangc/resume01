@@ -1,0 +1,118 @@
+---
+import { Image } from 'astro:assets'
+import { getImage } from '@utils/image'
+
+interface Props {
+  title?: string
+  description?: string
+  image?: string
+  name?: string
+  email?: string
+  phone?: string
+  date?: string
+  message?: string
+  content?: Array<{
+    title: string
+    icon?: string
+    text?: string
+    link?: string
+  }>
+}
+
+const { title = '', description = '', image = '', name = '', email = '', phone = '', date = '', message = '', content = [] } = Astro.props
+
+const props = Astro.props as Props
+
+// 统一处理所有图片
+const processImages = async (images: (string | undefined)[]) => {
+  return Promise.all(images.map((img) => (img ? getImage(img) : null)))
+}
+
+const processedImage = image ? await getImage(image) : null
+---
+
+<section class="bg-white py-8 md:py-16">
+  <div class="container mx-auto px-4">
+    <!-- Contact Info Section -->
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+      <!-- Clinic Contact -->
+      <div>
+        <div class="mb-3 flex items-center gap-2">
+          <div class="h-2 w-2 rounded-full bg-primary"></div>
+          <h3 class="text-sm text-primary">Contact</h3>
+        </div>
+        <hr class="mb-6 w-48 rounded border-2 border-primary" />
+        <h2 class="mb-8 text-3xl font-semibold md:text-4xl" data-in="wordFade">{title}</h2>
+        <h3 class="text-gray-600">{description}</h3>
+      </div>
+    </div>
+
+    <div class="my-12 grid grid-cols-2 gap-4 md:grid-cols-4">
+      {
+        content &&
+          content.map((item) => (
+            <div class="flex flex-col">
+              <h3 class="mb-4 text-xl font-semibold">{item.title}</h3>
+              <div class="flex items-center gap-2">
+                {item.icon && <Fragment set:html={item.icon} />}
+                {item.link ? (
+                  <a href={item.link} class="text-gray-600 hover:text-primary">
+                    {item.text}
+                  </a>
+                ) : (
+                  <span class="text-gray-600">{item.text}</span>
+                )}
+              </div>
+            </div>
+          ))
+      }
+    </div>
+
+    <!-- Contact Form Section -->
+    <div class="grid grid-cols-1 gap-8">
+      <div class="flex flex-col">
+        <form class="flex flex-col gap-6">
+          <!-- Full Name Field -->
+          <div class="flex flex-col gap-2">
+            <input
+              type="text"
+              id="fullName"
+              name="fullName"
+              placeholder="Full Name"
+              class="rounded-full border border-gray-300 p-3 focus:border-primary focus:outline-none"
+              required
+            />
+          </div>
+
+          <!-- Email Field -->
+          <div class="flex flex-col gap-2">
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Email"
+              class="rounded-full border border-gray-300 p-3 focus:border-primary focus:outline-none"
+              required
+            />
+          </div>
+
+          <!-- Message Field -->
+          <div class="flex flex-col gap-2">
+            <textarea
+              id="message"
+              name="message"
+              rows="6"
+              placeholder="Message"
+              class="rounded-xl border border-gray-300 p-3 focus:border-primary focus:outline-none"
+              required></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="rounded-full bg-primary px-6 py-3 text-center font-medium text-white transition-all hover:bg-gray-500">
+            Send a Message
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

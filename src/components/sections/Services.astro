@@ -1,0 +1,66 @@
+---
+import { Image } from 'astro:assets'
+import { getImage } from '@utils/image'
+import { Icon } from 'astro-icon/components'
+
+interface Props {
+  title?: string
+  subTitle?: string
+  image?: string
+  items: {
+    title: string
+    description: string
+    serviceImage?: string
+  }[]
+}
+
+const { title = '', subTitle = '', image = '', items = [] } = Astro.props
+
+// 统一处理所有图片
+const processImages = async (images: (string | undefined)[]) => {
+  return Promise.all(images.map((img) => (img ? getImage(img) : null)))
+}
+
+const [processedImage, ...processedServiceImages] = await processImages([image, ...items.map((item) => item.serviceImage)])
+---
+
+<section class="bg-white py-20">
+  <div class="container mx-auto grid grid-cols-1 gap-6 px-4 md:grid-cols-3">
+    <div class="flex flex-col justify-between">
+      <div class="h-full rounded-xl bg-primary p-8 text-white">
+        <div class="mb-3 flex items-center gap-2">
+          <div class="h-2 w-2 rounded-full bg-white"></div>
+          <h3 class="text-sm">Services</h3>
+        </div>
+        <hr class="mb-6 w-48 rounded border-2 border-white" />
+        <h2 class="mb-6 text-xl font-bold md:text-2xl">{title}</h2>
+        <p class="mb-6 text-lg/[1.6]">
+          {subTitle}
+        </p>
+      </div>
+      <div class="mt-4">
+        {processedImage && <Image src={processedImage} alt={title} width="720" height="405" class="h-full w-full rounded-xl object-cover" />}
+      </div>
+    </div>
+    <div class="col-span-2" data-in="fadeUpChild">
+      {
+        items.map((item, index) => (
+          <a href="/contact" class="flex flex-col justify-between border-b border-gray-300 p-6 first:border-t md:flex-row md:items-center md:hover:bg-gray-100">
+            <div class="aspect-[3/2] w-48 overflow-hidden rounded-xl md:w-40">
+              {processedServiceImages[index] && (
+                <Image width="300" height="200" src={processedServiceImages[index]} alt={item.title} class="mr-16 h-full w-full object-cover object-center" />
+              )}
+            </div>
+            <div class="mt-4 md:mt-0">
+              <h3 class="pb-2 text-xl font-semibold md:pb-4">{item.title}</h3>
+              <p class="max-w-96 text-gray-600">{item.description}</p>
+            </div>
+            <div class="group mt-4 flex h-12 w-12 items-center justify-center rounded-full transition-transform duration-700 hover:bg-black md:hover:bg-gray-600">
+              <Icon name="arrow-top-right" class="h-6 w-6 transition-transform duration-500 group-hover:text-white md:group-hover:rotate-45" />
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>

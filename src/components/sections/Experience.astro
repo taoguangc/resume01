@@ -1,0 +1,67 @@
+---
+import { Icon } from 'astro-icon/components'
+
+interface Props {
+  title?: string
+  desc?: string
+  items?: {
+    title: string
+    company: string
+    employmentType: string
+    location: string
+    startDate: string
+    endDate?: string
+    description: string
+  }[]
+}
+
+const { title, desc, items = [] } = Astro.props
+---
+
+<section class="mx-6 rounded-xl border border-neutral-200 bg-white md:mx-0" id="experience" data-in="zoomIn">
+  <div class="border-b border-neutral-200 p-6 md:p-8">
+    <div class="inline-block rounded-lg border border-neutral-200 bg-neutral-100 p-3">
+      <Icon name="magic" class="h-6 w-6" />
+    </div>
+    <h2 class="my-4 text-xl font-medium tracking-tight md:text-2xl">{title}</h2>
+    <p class="max-w-96 text-sm font-medium text-content">{desc}</p>
+  </div>
+
+  <div class="p-6 md:p-8">
+    <ul class="dot-list space-y-8 pl-6 text-xs font-medium text-content md:pl-12">
+      {
+        items.map((item) => (
+          <li>
+            <div class="grid gap-4 md:grid-cols-[2fr_1fr] md:items-start">
+              <div class="flex flex-col gap-2">
+                <h3 class="text-base font-medium text-primary">{item.title}</h3>
+                <div class="flex flex-col gap-2">
+                  <p>
+                    {item.company} · {item.employmentType}
+                  </p>
+                </div>
+              </div>
+              <div class="flex md:justify-end">
+                <div class="inline-flex items-center gap-1.5 rounded border border-neutral-200 px-3 py-2 leading-none">
+                  <Icon name="calendar" class="h-3 w-3" />
+                  <p class="leading-none">
+                    {new Date(item.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} -
+                    {item.endDate ? new Date(item.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Present'}
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 md:col-span-3">
+                <Icon name="location" class="h-4 w-4" />
+                <p>{item.location}</p>
+              </div>
+
+              <div class="md:col-span-3">
+                <p class="md:max-w-96">{item.description}</p>
+              </div>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

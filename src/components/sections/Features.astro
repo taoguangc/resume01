@@ -1,0 +1,85 @@
+---
+import Button from '@components/ui/Button.astro'
+import { Icon } from 'astro-icon/components'
+
+interface Props {
+  title?: string
+  text?: string
+  linkTitle?: string
+  link?: string
+  cards?: Array<{
+    icon?: string
+    heading: string
+    content: string
+  }>
+}
+
+// 处理图标名称，只保留文件名（不含扩展名）
+const getIconName = (path: string = '') => {
+  return path.split('/').pop()?.replace('.svg', '') || ''
+}
+
+const { title = '', text = '', linkTitle = '', link = '', cards = [] } = Astro.props
+---
+
+<section class="relative bg-white" id="features">
+  <!-- 使用 min-height 预留空间，避免内容加载时的布局偏移 -->
+  <div class="min-h-[400px] py-16 md:min-h-[500px] md:pt-24 md:pb-20">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-x-16 md:gap-y-6">
+        <!-- Left Column - Title -->
+        <div class="md:col-span-1">
+          <h2 class="min-h-[2.5em] text-3xl font-semibold md:text-4xl" data-in="wordFade">{title}</h2>
+        </div>
+
+        <!-- Right Column - Text and Link -->
+        <div class="md:col-span-1">
+          <div class="mb-3 flex items-center gap-2">
+            <div class="h-2 w-2 rounded-full bg-primary"></div>
+            <h3 class="text-sm text-primary">Features</h3>
+          </div>
+          <hr class="mb-6 w-48 rounded border-2 border-primary" />
+          <p class="mb-6 min-h-[3em] text-slate-600">{text}</p>
+          {
+            linkTitle && link && (
+              <div>
+                <Button href={link} showIcon={false} aria-label={`Learn more about ${title} ${linkTitle}`}>
+                  {linkTitle}
+                </Button>
+              </div>
+            )
+          }
+        </div>
+
+        <!-- Cards Grid -->
+        <div class="md:col-span-2">
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+            {
+              cards &&
+                cards.map((card) => (
+                  <div class="flex min-h-[200px] flex-col rounded-2xl border border-gray-300 p-6">
+                    <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-white">
+                      {card.icon ? (
+                        <Icon name={getIconName(card.icon)} class="h-6 w-6 text-white" />
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                    <h3 class="mb-2 min-h-[1.5em] text-xl font-semibold">{card.heading}</h3>
+                    <p class="min-h-[4.5em] text-gray-600">{card.content}</p>
+                  </div>
+                ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

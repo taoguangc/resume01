@@ -1,0 +1,55 @@
+---
+import { type CollectionEntry } from 'astro:content'
+import { Image } from 'astro:assets'
+import FormattedDate from '@components/ui/FormattedDate.astro'
+import Button from '@components/ui/Button.astro'
+import { getImage } from '@utils/image'
+
+const { post } = Astro.props as { post: CollectionEntry<'blog'> }
+const { title, excerpt, publishDate, updatedDate, featureImage, isFeatured } = post.data
+const processedImage = featureImage ? await getImage(featureImage.src) : null
+---
+
+<article class="mt-4">
+  {
+    featureImage?.src && processedImage && (
+      <figure class="post-card-thumbnail mb-6 md:mb-0">
+        <a href={`/blog/${post.id}/`}>
+          <Image src={processedImage} width="400" height="240" class="w-full rounded-2xl" alt={featureImage.alt || ''} loading="lazy" decoding="async" />
+        </a>
+      </figure>
+    )
+  }
+  <div class="pt-6">
+    <div class="mb-2 text-sm tracking-wider text-primary uppercase">
+      {
+        isFeatured && (
+          <>
+            <span class="font-semibold">Featured</span>
+            {' / '}
+          </>
+        )
+      }
+      <FormattedDate date={publishDate} />
+      {
+        updatedDate && (
+          <>
+            {' '}
+            <span>
+              (Updated on <FormattedDate date={updatedDate} />)
+            </span>
+          </>
+        )
+      }
+    </div>
+    <h2 class="text-lg md:font-bold"><a href={`/blog/${post.id}/`}>{title}</a></h2>
+  </div>
+  {
+    excerpt && (
+      <div class="post-card-content mt-2 mb-4">
+        <div class="prose max-w-none prose-slate sm:prose-lg">{excerpt}</div>
+      </div>
+    )
+  }
+  <Button href={`/blog/${post.id}/`} variant={'outline'}>Read Full Post</Button>
+</article>

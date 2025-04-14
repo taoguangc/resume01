@@ -1,0 +1,45 @@
+---
+import { Icon } from 'astro-icon/components'
+
+interface Props {
+  title?: string
+  desc?: string
+  categories?: {
+    category: string
+    skills: {
+      skill: string
+    }[]
+  }[]
+}
+
+const { title, desc, categories = [] } = Astro.props
+---
+
+<section class="mx-6 rounded-xl border border-neutral-200 bg-white md:mx-0" id="skills" data-in="zoomIn">
+  <div class="border-b border-neutral-200 p-6 md:p-8">
+    <div class="inline-block rounded-lg border border-neutral-200 bg-neutral-100 p-3">
+      <Icon name="skills" class="h-6 w-6" />
+    </div>
+    <h2 class="my-4 text-xl font-medium tracking-tight md:text-2xl">{title}</h2>
+    <p class="max-w-96 text-sm font-medium text-content">{desc}</p>
+  </div>
+
+  <div class="p-6 text-xs md:p-8">
+    <div class="space-y-8">
+      {
+        categories.map((category) => (
+          <div class="space-y-4">
+            <h3 class="text-lg font-medium text-primary">{category.category}</h3>
+            <div class="inline-flex flex-wrap gap-3">
+              {category.skills.map((skill) => (
+                <div class="inline rounded-lg border border-neutral-200 px-3 py-1">
+                  <span class="font-medium">{skill.skill}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

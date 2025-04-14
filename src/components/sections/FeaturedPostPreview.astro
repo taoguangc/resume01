@@ -1,0 +1,52 @@
+---
+import { type CollectionEntry } from 'astro:content'
+import FormattedDate from '@components/ui/FormattedDate.astro'
+
+const { post } = Astro.props as { post: CollectionEntry<'blog'> }
+const { title, publishDate, updatedDate, featureImage, excerpt } = post.data
+---
+
+<article class="mb-12 sm:mb-16">
+  <header class="mx-auto max-w-3xl">
+    <div class="mb-2 text-sm tracking-wider text-slate-500 uppercase sm:mb-3">
+      <span class="text-primary">Featured</span>
+      {' / '}
+      <FormattedDate date={publishDate} />
+      {
+        updatedDate && (
+          <>
+            {' '}
+            <span>
+              (Updated on <FormattedDate date={updatedDate} />)
+            </span>
+          </>
+        )
+      }
+    </div>
+    <h2 class="text-3xl font-bold text-slate-900 sm:text-4xl md:text-5xl"><a href={`/blog/${post.id}/`}>{title}</a></h2>
+  </header>
+  {
+    featureImage?.src && (
+      <figure class="mx-auto my-6 max-w-6xl sm:my-8">
+        <a href={`/blog/${post.id}/`}>
+          <img class="w-full rounded-md" src={featureImage.src} loading="lazy" decoding="async" alt={featureImage.alt || ''} />
+        </a>
+      </figure>
+    )
+  }
+  {
+    excerpt && (
+      <div class="mx-auto mt-6 max-w-3xl">
+        <div class="prose max-w-none prose-slate sm:prose-lg">{excerpt}</div>
+      </div>
+    )
+  }
+  <div class="mx-auto mt-8 max-w-3xl">
+    <a
+      class="hover:shadow-button inline-flex items-center justify-center gap-1.5 rounded-full bg-primary px-8 py-2.5 font-semibold text-white transition duration-300"
+      href={`/blog/${post.id}/`}
+    >
+      Continue Reading
+    </a>
+  </div>
+</article>

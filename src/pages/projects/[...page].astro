@@ -1,0 +1,55 @@
+---
+import type { GetStaticPathsOptions, Page } from 'astro'
+import { type CollectionEntry, getCollection } from 'astro:content'
+import Layout from '@layouts/Layout.astro'
+import { Icon } from 'astro-icon/components'
+import PostPreview from '@components/sections/ProjectPreview.astro'
+import siteConfig from '@data/global/index.json'
+// import { sortPostsByDateDesc } from '../../utils/post-utils'
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const projects = await getCollection('projects')
+  return paginate(projects, { pageSize: siteConfig.projectsPerPage || 5 })
+}
+
+const { page } = Astro.props as { page: Page<CollectionEntry<'projects'>> }
+const projects = page.data
+---
+
+<Layout title="Projects" description="View our latest projects" image={{ src: '/ovidius-preview.jpg', alt: 'The preview of the site' }}>
+  <main class="grow px-4 py-12 sm:px-8 sm:py-16">
+    <h1 class="sr-only">Projects</h1>
+    <div class="mx-auto max-w-3xl xl:max-w-6xl">
+      {projects.map((project) => <PostPreview project={project} />)}
+    </div>
+    <nav aria-label="Pagination" class="mx-auto my-12 max-w-3xl border-t border-slate-200 pt-12 sm:my-16 sm:pt-16">
+      <div class="relative px-12 text-center">
+        {
+          page.url.prev && (
+            <a
+              class="hover:shadow-button absolute top-1/2 left-0 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-slate-50 text-lg text-slate-700 transition duration-300 hover:bg-primary hover:text-white"
+              href={page.url.prev}
+              rel="prefetch"
+              aria-label={`Go to page ${page.currentPage - 1} of ${page.lastPage}`}
+            >
+              <Icon name="arrow-left" class="h-5 w-5 fill-current" />
+            </a>
+          )
+        }
+        <span class="text-sm tracking-wider text-slate-500 uppercase" aria-current="page">Page {page.currentPage} of {page.lastPage}</span>
+        {
+          page.url.next && (
+            <a
+              class="hover:shadow-button absolute top-1/2 right-0 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-slate-50 text-lg text-slate-700 transition duration-300 hover:bg-primary hover:text-white"
+              href={page.url.next}
+              rel="prefetch"
+              aria-label={`Go to page ${page.currentPage + 1} of ${page.lastPage}`}
+            >
+              <Icon name="arrow-right" class="h-5 w-5 fill-current" />
+            </a>
+          )
+        }
+      </div>
+    </nav>
+  </main>
+</Layout>

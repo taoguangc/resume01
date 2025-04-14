@@ -1,0 +1,80 @@
+---
+import { Image } from 'astro:assets'
+import { getImage } from '@utils/image'
+import Button from '@components/ui/Button.astro'
+import { Icon } from 'astro-icon/components'
+
+interface Props {
+  title?: string
+  subTitle?: string
+  staff?: Array<{
+    name?: string
+    job?: string
+    image?: string
+    link?: string
+  }>
+}
+
+const { title = '', subTitle = '', staff = [] } = Astro.props
+
+// 统一处理所有图片
+const processImages = async (images: (string | undefined)[]) => {
+  return Promise.all(images.map((img) => (img ? getImage(img) : null)))
+}
+
+const processedImages = await processImages(staff.map((s) => s.image))
+---
+
+<section class="bg-white py-16 md:py-20">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col gap-0 md:grid-cols-2 md:flex-row md:items-center md:justify-between md:gap-x-16 md:gap-y-6">
+      <div>
+        <div class="mb-3 flex items-center gap-2">
+          <div class="h-2 w-2 rounded-full bg-primary"></div>
+          <h3 class="text-sm text-primary">Teams</h3>
+        </div>
+        <hr class="mb-6 w-48 rounded border-2 border-primary" />
+        <div>
+          <h2 class="mb-4 text-3xl font-semibold md:mb-8 md:text-4xl" data-in="wordFade">{title}</h2>
+          <p class="mb-2 text-gray-600 md:mb-6">{subTitle}</p>
+        </div>
+      </div>
+
+      <!-- Right Column - Text and Link -->
+      <div class="my-6">
+        <Button href="/about#team" showIcon={false}> View More </Button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
+      {
+        staff &&
+          staff.map((s, index) => (
+            <div class="flex flex-col">
+              {processedImages[index] && (
+                <div class="mb-4 aspect-square overflow-hidden rounded-2xl md:aspect-[3/4]">
+                  <Image src={processedImages[index]} alt={s.name || 'Staff member'} class="h-full w-full object-cover" width="300" height="400" />
+                </div>
+              )}
+              <div class="flex flex-row items-center justify-between">
+                <div>
+                  <h3 class="mb-1 text-xl font-semibold">{s.name}</h3>
+                  <p class="text-sm text-gray-500">{s.job}</p>
+                </div>
+                <a
+                  href={s.link || 'https://linkedin.com'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-gray-600 hover:text-primary"
+                  aria-label={`Visit ${s.name}'s LinkedIn profile`}
+                >
+                  <span class="sr-only">Visit {s.name}'s LinkedIn profile</span>
+                  <Icon name="linkedin" size={24} aria-hidden="true" />
+                </a>
+              </div>
+            </div>
+          ))
+      }
+    </div>
+  </div>
+</section>

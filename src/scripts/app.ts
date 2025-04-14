@@ -11,30 +11,21 @@ function getAnimationDuration(element: HTMLElement, defaultDuration: number): nu
   return parseFloat(element.getAttribute('data-duration') || String(defaultDuration))
 }
 
-// 使用 IntersectionObserver API 实现延迟动画
 function initFadeAnimation() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const element = entry.target as HTMLElement
-        const animationType = element.getAttribute('data-in')
-        if (!animationType) return
+  document.querySelectorAll('[data-in]').forEach((element) => {
+    inView(element, (element, entry) => {
+      const targetElement = entry.target as HTMLElement
+      const animationType = targetElement.getAttribute('data-in')
+      if (!animationType) return
 
-        requestAnimationFrame(() => {
-          const duration = getAnimationDuration(element, 0.5)
-          handleAnimation(element, animationType, duration)
-        })
-        
-        observer.unobserve(element)
+      const duration = getAnimationDuration(targetElement, 0.5)
+
+      try {
+        handleAnimation(targetElement, animationType, duration)
+      } catch (error) {
+        console.warn(`Animation error for ${animationType}:`, error)
       }
     })
-  }, {
-    threshold: 0.1,
-    rootMargin: '50px'
-  })
-
-  document.querySelectorAll('[data-in]').forEach(element => {
-    observer.observe(element)
   })
 }
 
@@ -70,11 +61,7 @@ function handleAnimation(element: HTMLElement, type: string, duration: number) {
       animate(element, { scale: [0.5, 1], opacity: [0, 1] }, { duration })
       break
     case 'rotateX':
-      animate(
-        element,
-        { transform: ['perspective(1000px) rotateX(30deg)', 'rotateX(0)'] },
-        { duration: getAnimationDuration(element as HTMLElement, 1) }
-      )
+      animate(element, { transform: ['perspective(1000px) rotateX(30deg)', 'rotateX(0)'] }, { duration: getAnimationDuration(element as HTMLElement, 1) })
       break
   }
 }

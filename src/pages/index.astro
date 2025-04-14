@@ -1,8 +1,8 @@
 ---
-import Layout from '../layouts/Layout.astro'
-import siteConfigData from '../data/global/index.json'
-import homeData from '../data/home/index.json'
-import Button from '../components/ui/Button.astro'
+import Layout from '@/layouts/Layout.astro'
+import siteConfigData from '@data/global/index.json'
+import homeData from '@data/home/index.json'
+import Button, { type ButtonVariant } from '@components/ui/Button.astro'
 
 const siteConfig = siteConfigData
 const { title, subtitle, buttons, sections } = homeData
@@ -23,13 +23,13 @@ const SECTION_COMPONENTS = Object.fromEntries(
       <span class="h-2 w-2 animate-pulse rounded-full border-2 border-green-200 bg-green-500"></span>
       Available for Work
     </div>
-    {title && <h1 class="mb-4 text-3xl font-medium md:text-5xl">{title}</h1>}
+    {title && <h1 class="mb-4 text-3xl font-semibold md:text-5xl">{title}</h1>}
     {subtitle && <p class="mb-8 text-lg text-content">{subtitle}</p>}
     {
       buttons && buttons.length > 0 && (
         <div class="flex justify-center gap-4">
           {buttons.map((button) => (
-            <Button href={button.link} icon={button.icon} variant={button.style}>
+            <Button href={button.link} icon={button.icon} variant={button.style as ButtonVariant}>
               {button.title}
             </Button>
           ))}

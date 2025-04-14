@@ -2,10 +2,10 @@
 import type { HTMLAttributes } from 'astro/types'
 import { Icon } from 'astro-icon/components'
 
-type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'borderless'
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'borderless'
 type ButtonSize = 'base' | 'lg'
 
-type CommonProps = {
+interface CommonProps {
   variant?: ButtonVariant
   size?: ButtonSize
   icon?: string
@@ -16,6 +16,10 @@ type AnchorProps = HTMLAttributes<'a'> & CommonProps & { href: string }
 type Props = ButtonProps | AnchorProps
 
 const { href, class: className, variant = 'primary', size = 'base', icon = 'write', ...rest } = Astro.props
+
+const getIconName = (path: string = '') => {
+  return path.split('/').pop()?.replace('.svg', '') || ''
+}
 
 const baseStyles = {
   primary: 'bg-primary text-white hover:brightness-[0.95]',

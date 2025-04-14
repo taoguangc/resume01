@@ -12,51 +12,46 @@ function getAnimationDuration(element: HTMLElement, defaultDuration: number): nu
 }
 
 function initFadeAnimation() {
+  // 使用 motion 的 inView API 替代 IntersectionObserver
   document.querySelectorAll('[data-in]').forEach((element) => {
-    const animationType = (element as HTMLElement).getAttribute('data-in')
-    if (!animationType) return
+    inView(element, ({ target }) => {
+      const animationType = target.getAttribute('data-in')
+      if (!animationType) return
 
-    inView(element, (element, entry) => {
-      const targetElement = entry.target as HTMLElement
-      const duration = getAnimationDuration(targetElement, 0.5)
+      const duration = getAnimationDuration(target as HTMLElement, 0.5)
 
       try {
         switch (animationType) {
           case 'fadeDown':
-            animate(targetElement, { y: ['-100%', 0], opacity: [0, 1] }, { duration })
+            animate(target, { y: ['-100%', 0], opacity: [0, 1] }, { duration })
             break
           case 'fadeUp':
-            animate(targetElement, { y: [100, 0], opacity: [0, 1] }, { duration })
+            animate(target, { y: [100, 0], opacity: [0, 1] }, { duration })
             break
           case 'fadeUpChild':
-            if (targetElement.children.length > 0) {
-              const children = Array.from(targetElement.children)
+            if (target.children.length > 0) {
+              const children = Array.from(target.children)
               animate(children, { y: [100, 0], opacity: [0, 1] }, { duration, delay: stagger(0.2) })
             }
             break
           case 'wordFade':
-            const text = targetElement.textContent
+            const text = target.textContent
             if (text && text.trim()) {
               const words = text.trim().split(' ')
               if (words.length > 0) {
-                targetElement.innerHTML = words.map((word: string) => `<span style="display: inline-block; opacity: 0">${word}</span>`).join(' ')
-
-                const spans = targetElement.querySelectorAll('span')
+                target.innerHTML = words.map((word) => `<span style="display: inline-block; opacity: 0">${word}</span>`).join(' ')
+                const spans = target.querySelectorAll('span')
                 if (spans.length > 0) {
-                  animate(spans, { opacity: [0, 1], y: [10, 0] }, { duration: getAnimationDuration(targetElement, 0.4), delay: stagger(0.1) })
+                  animate(spans, { opacity: [0, 1], y: [10, 0] }, { duration: getAnimationDuration(target as HTMLElement, 0.4), delay: stagger(0.1) })
                 }
               }
             }
             break
           case 'zoomIn':
-            animate(targetElement, { scale: [0.5, 1], opacity: [0, 1] }, { duration })
+            animate(target, { scale: [0.5, 1], opacity: [0, 1] }, { duration })
             break
           case 'rotateX':
-            animate(
-              targetElement,
-              { transform: ['perspective(1000px) rotateX(30deg)', 'rotateX(0)'] },
-              { duration: getAnimationDuration(targetElement as HTMLElement, 1) }
-            )
+            animate(target, { transform: ['perspective(1000px) rotateX(30deg)', 'rotateX(0)'] }, { duration: getAnimationDuration(target as HTMLElement, 1) })
             break
         }
       } catch (error) {

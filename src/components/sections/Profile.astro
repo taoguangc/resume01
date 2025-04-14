@@ -27,9 +27,9 @@ const processedImage = image ? await getImage(image) : null
         <Image
           src={processedImage}
           alt={title ?? ''}
-          width="400"
-          height="500"
-          class="h-full w-full object-cover content-visibility-auto"
+          width="360"
+          height="480"
+          class="h-full w-auto object-cover content-visibility-auto"
           loading="eager"
           fetchpriority="high"
           decoding="sync"

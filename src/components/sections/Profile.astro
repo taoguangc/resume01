@@ -27,14 +27,14 @@ const processedImage = image ? await getImage(image) : null
         <Image
           src={processedImage}
           alt={title ?? ''}
-          width="360"
-          height="480"
-          class="h-full w-auto object-cover content-visibility-auto"
+          width={360}
+          height={480}
           loading="eager"
+          decoding="async"
           fetchpriority="high"
-          decoding="sync"
+          class="h-full w-auto object-cover content-visibility-auto"
+          format="avif"
           quality={75}
-          format="webp"
         />
       )
     }

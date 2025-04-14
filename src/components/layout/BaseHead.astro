@@ -45,14 +45,33 @@ function formatCanonicalURL(url: string | URL) {
 <meta name="robots" content="index, follow" />
 <meta name="author" content="Enima" />
 
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com" aria-label="Connect to Google Fonts" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin aria-label="Connect to Google Fonts Static" />
+<!-- Resource Hints -->
 <link
-  href={`https://fonts.googleapis.com/css2?family=${themeData.fonts.sans[0].replace(' ', '+')}:wght@200..800&text=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&display=swap`}
-  rel="stylesheet"
-  aria-label="Load Google Font"
+  rel="preload"
+  as="font"
+  href={`https://fonts.googleapis.com/css2?family=${themeData.fonts.sans[0].replace(' ', '+')}:wght@400&display=swap`}
+  crossorigin
 />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+<!-- Performance Optimization -->
+<meta http-equiv="x-dns-prefetch-control" content="on" />
+<link rel="modulepreload" href="/scripts/app.js" />
+<link rel="modulepreload" href="/scripts/lenis.js" />
+<meta name="view-transition" content="same-origin" />
+
+<!-- Resource Loading Optimization -->
+{
+  themeData.fonts.sans.map((font) => (
+    <link
+      href={`https://fonts.googleapis.com/css2?family=${font.replace(' ', '+')}:wght@200..800&text=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&display=swap`}
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+  ))
+}
 
 <!-- Low Priority Global Metadata -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" aria-label="Website Favicon" />

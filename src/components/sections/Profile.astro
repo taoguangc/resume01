@@ -27,14 +27,18 @@ const processedImage = image ? await getImage(image) : null
         <Image
           src={processedImage}
           alt={title ?? 'Profile Image'}
+          widths={[360, 720, 1080]}
+          sizes="(max-width: 768px) 100vw, 33vw"
           width={360}
           height={480}
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
           loading="eager"
           decoding="async"
           fetchpriority="high"
-          class="h-full w-full object-cover content-visibility-auto"
+          class="h-full w-full object-cover"
           format="webp"
-          quality={85}
+          quality={75}
         />
       )
     }

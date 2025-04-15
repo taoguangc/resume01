@@ -17,10 +17,10 @@ export default defineConfig({
   image: {
     experimentalLayout: 'responsive'
   },
-  compressHTML: true,
   experimental: {
     responsiveImages: true
   },
+  compressHTML: true,
   vite: {
     plugins: [tailwindcss()]
   }

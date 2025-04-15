@@ -6,7 +6,7 @@ import icon from 'astro-icon'
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://enima.vercel.app',
+  site: 'https://resume01-weld.vercel.app',
   integrations: [
     mdx(),
     sitemap(),

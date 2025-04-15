@@ -12,6 +12,18 @@ export default defineConfig({
     sitemap(),
     icon({
       iconDir: 'src/assets/icons'
+    }),
+    compress({
+      CSS: true,
+      HTML: {
+        'html-minifier-terser': {
+          removeAttributeQuotes: false
+        }
+      },
+      Image: false,
+      JavaScript: true,
+      SVG: false,
+      Logger: 1
     })
   ],
   image: {

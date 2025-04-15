@@ -2,21 +2,38 @@
 const currentYear = new Date().getFullYear()
 ---
 
-<footer class="min-h-16 w-full">
-  <div class="container border-t border-gray-200 py-6">
-    <div class="flex flex-col items-center justify-center">
+<footer class="mt-auto w-full border-t border-gray-200 bg-white">
+  <div class="container mx-auto px-4">
+    <div class="flex h-20 items-center justify-center">
       <p class="text-sm text-content">© {currentYear} , All Right Reserved</p>
     </div>
   </div>
 </footer>
 
-<!-- <script>
-  import('@scripts/app.ts').catch(console.error)
-  import('@data/global/index.json')
-    .then((module) => {
-      if (module.default?.enableSmoothScroll) {
-        import('@scripts/lenis.ts').catch(console.error)
+<script type="module">
+  // 使用 requestIdleCallback 在浏览器空闲时加载脚本
+  const loadScripts = async () => {
+    const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1))
+
+    idle(async () => {
+      try {
+        // 使用 Promise.all 并行加载所有脚本
+        const [{ default: siteConfig }, appModule] = await Promise.all([import('@data/global/index.json'), import('@scripts/app.ts')])
+
+        // 如果启用了平滑滚动，则异步加载 lenis
+        if (siteConfig?.enableSmoothScroll) {
+          await import('@scripts/lenis.ts')
+        }
+      } catch (error) {
+        console.error('Failed to load scripts:', error)
       }
     })
-    .catch(console.error)
-</script> -->
+  }
+
+  // 如果页面已经加载完成则立即执行，否则等待 DOMContentLoaded 事件
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadScripts)
+  } else {
+    loadScripts()
+  }
+</script>

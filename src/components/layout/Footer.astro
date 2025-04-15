@@ -1,24 +1,22 @@
 ---
-// import siteConfig from '@data/global/index.json'
-// import { Icon } from 'astro-icon/components'
-
-// const socialLinks = siteConfig.socialLinks || []
-// const secondaryNavLinks = siteConfig.secondaryNavLinks || []
+const currentYear = new Date().getFullYear()
 ---
 
-<footer class="min-h-16 py-8 md:px-4">
-  <div class="container mx-auto">
-    <div class="flex flex-col items-center justify-center border-t border-t-gray-200 pt-6">
-      <p class="text-sm text-content">© {new Date().getFullYear()} , All Right Reserved</p>
+<footer class="min-h-[5rem] w-full border-t border-gray-200 bg-white py-6">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col items-center justify-center">
+      <p class="text-sm text-content">© {currentYear} , All Right Reserved</p>
     </div>
   </div>
 </footer>
+
 <script>
-  import '@scripts/app.ts'
-  import siteConfig from '@data/global/index.json'
-  {
-    if (siteConfig?.enableSmoothScroll) {
-      import('@scripts/lenis.ts')
-    }
-  }
+  import('@scripts/app.ts').catch(console.error)
+  import('@data/global/index.json')
+    .then((module) => {
+      if (module.default?.enableSmoothScroll) {
+        import('@scripts/lenis.ts').catch(console.error)
+      }
+    })
+    .catch(console.error)
 </script>

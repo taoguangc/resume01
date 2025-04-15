@@ -15,7 +15,20 @@ export default defineConfig({
     })
   ],
   image: {
+    service: {
+      entrypoint: 'astro/assets/services/sharp'
+    },
+    domains: ['localhost'],
+    remotePatterns: [],
     experimentalLayout: 'responsive'
+  },
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'hover'
+  },
+  compressHTML: true,
+  build: {
+    inlineStylesheets: 'auto'
   },
   experimental: {
     responsiveImages: true

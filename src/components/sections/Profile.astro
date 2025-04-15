@@ -18,23 +18,28 @@ const getIconName = (path: string = '') => {
 }
 
 const processedImage = image ? await getImage(image) : null
+
+// 添加预加载链接
+const preloadImageUrl = processedImage?.src
 ---
 
+{preloadImageUrl && <link rel="preload" as="image" href={preloadImageUrl} fetchpriority="high" />}
+
 <section class="grid h-min w-full grid-cols-8 grid-rows-[min-content] justify-center gap-3 overflow-visible px-6 md:px-0" id="profile">
-  <div class="col-span-8 overflow-hidden rounded-2xl md:col-span-3" data-in="zoomIn">
+  <div class="col-span-8 aspect-[3/4] w-full overflow-hidden rounded-2xl md:col-span-3" data-in="zoomIn">
     {
       processedImage && (
         <Image
           src={processedImage}
-          alt={title ?? ''}
+          alt={title ?? 'Profile Image'}
           width={360}
           height={480}
           loading="eager"
           decoding="async"
           fetchpriority="high"
-          class="h-full w-auto object-cover content-visibility-auto"
-          format="avif"
-          quality={75}
+          class="h-full w-full object-cover content-visibility-auto"
+          format="webp"
+          quality={85}
         />
       )
     }

@@ -5,3 +5,20 @@
 // const socialLinks = siteConfig.socialLinks || []
 // const secondaryNavLinks = siteConfig.secondaryNavLinks || []
 ---
+
+<footer class="min-h-16 py-8 md:px-4">
+  <div class="container mx-auto">
+    <div class="flex flex-col items-center justify-center border-t border-t-gray-200 pt-6">
+      <p class="text-sm text-content">© {new Date().getFullYear()} , All Right Reserved</p>
+    </div>
+  </div>
+</footer>
+<script>
+  import '@scripts/app.ts'
+  import siteConfig from '@data/global/index.json'
+  {
+    if (siteConfig?.enableSmoothScroll) {
+      import('@scripts/lenis.ts')
+    }
+  }
+</script>

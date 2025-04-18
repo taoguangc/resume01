@@ -4,7 +4,10 @@ import Marquee from '../sections/marquee'
 import Profile from '../sections/profile'
 import Experience from '../sections/experience'
 import Education from '../sections/education'
+import Certs from '../sections/certs'
 import Skills from '../sections/skills'
+import Languages from '../sections/languages'
+import Awards from '../sections/awards'
 
 const Home: Collection = {
   label: 'Home',
@@ -83,7 +86,7 @@ const Home: Collection = {
       ui: {
         visualSelector: true
       },
-      templates: [Hero, Marquee, Profile, Experience, Education, Skills]
+      templates: [Hero, Marquee, Profile, Experience, Education, Certs, Skills, Languages, Awards]
     }
   ]
 }

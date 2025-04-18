@@ -43,7 +43,7 @@ const Languages: Template = {
           type: 'string',
           label: 'Proficiency Level',
           name: 'level',
-          description: 'e.g. Native, Professional, Elementary'
+          options: ['Native or bilingual proficiency', 'Professional working proficiency', 'Limited working proficiency', 'Elementary proficiency', 'Beginner']
         }
       ]
     }

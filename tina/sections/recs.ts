@@ -41,7 +41,10 @@ const Recs: Template = {
         {
           type: 'datetime',
           label: 'Date',
-          name: 'date'
+          name: 'date',
+          ui: {
+            dateFormat: 'YYYY/MM'
+          }
         },
         {
           type: 'string',

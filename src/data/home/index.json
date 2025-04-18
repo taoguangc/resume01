@@ -100,6 +100,37 @@
       "_template": "Education"
     },
     {
+      "title": "Licenses & Certifications",
+      "desc": "Professional accreditations and certifications demonstrating expertise and compliance with industry standards.",
+      "items": [
+        {
+          "name": "Data Analysis & Visualization",
+          "issuedBy": "NexusWorks",
+          "issueDate": "2024-01-17T16:00:00.000Z",
+          "url": "https://www.coursera.org"
+        },
+        {
+          "name": "Data Analysis Professional",
+          "issuedBy": "StellarWave",
+          "issueDate": "2023-10-31T16:00:00.000Z",
+          "url": "https://www.coursera.org"
+        },
+        {
+          "name": "Data Analytics Mastery",
+          "issuedBy": "BrightByte",
+          "issueDate": "2023-08-17T16:00:00.000Z",
+          "url": "https://www.coursera.org"
+        },
+        {
+          "name": "Strategic Business Consulting",
+          "issuedBy": "DataSpark",
+          "issueDate": "2023-02-17T16:00:00.000Z",
+          "url": "https://www.coursera.org"
+        }
+      ],
+      "_template": "Certs"
+    },
+    {
       "title": "Professional Skills",
       "desc": "Key competencies essential for navigating and excelling in various professional contexts.",
       "categories": [
@@ -160,6 +191,49 @@
         }
       ],
       "_template": "Skills"
+    },
+    {
+      "title": "Languages",
+      "desc": "Proficient in multiple languages, facilitating effective communication and collaboration in diverse settings.",
+      "items": [
+        {
+          "code": "GB",
+          "name": "English",
+          "level": "Native or bilingual proficiency"
+        },
+        {
+          "code": "FR",
+          "name": "French",
+          "level": "Professional working proficiency"
+        },
+        {
+          "code": "ES",
+          "name": "Spanish",
+          "level": "Elementary proficiency"
+        }
+      ],
+      "_template": "Languages"
+    },
+    {
+      "title": "Honors & Awards",
+      "desc": "Acknowledgments for exceptional achievements and contributions in professional endeavors.",
+      "items": [
+        {
+          "award": "Business Innovation Award",
+          "issuedBy": "CCRSolution",
+          "category": "Consulting",
+          "desc": "Commending exemplary expertise in business consulting, driving innovative strategies and impactful outcomes.",
+          "Date": "2022-06-30T16:00:00.000Z"
+        },
+        {
+          "award": "Data Science Excellence Award",
+          "issuedBy": "Nexus",
+          "category": "Data Science",
+          "desc": "Recognizing outstanding contributions in pioneering data-driven solutions and strategic insights.",
+          "Date": "2023-11-30T16:00:00.000Z"
+        }
+      ],
+      "_template": "Awards"
     }
   ]
 }

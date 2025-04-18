@@ -1,8 +1,8 @@
 import type { Template } from 'tinacms'
 
-const Awards: Template = {
-  label: 'Awards',
-  name: 'Awards',
+const Certs: Template = {
+  label: 'Certs',
+  name: 'Certs',
   fields: [
     {
       type: 'string',
@@ -19,19 +19,19 @@ const Awards: Template = {
     },
     {
       type: 'object',
-      label: 'Awards Items',
+      label: 'Certs Items',
       name: 'items',
       list: true,
       ui: {
         itemProps: (item) => {
-          return { label: item?.award }
+          return { label: `${item?.name} - ${item?.issuedBy}` }
         }
       },
       fields: [
         {
           type: 'string',
-          label: 'Award Name',
-          name: 'award'
+          label: 'Certificate Name',
+          name: 'name'
         },
         {
           type: 'string',
@@ -39,29 +39,21 @@ const Awards: Template = {
           name: 'issuedBy'
         },
         {
-          type: 'string',
-          label: 'Category',
-          name: 'category'
-        },
-        {
-          type: 'string',
-          label: 'Description',
-          name: 'desc',
-          ui: {
-            component: 'textarea'
-          }
-        },
-        {
           type: 'datetime',
-          label: 'Date',
-          name: 'Date',
+          label: 'Issue Date',
+          name: 'issueDate',
           ui: {
             dateFormat: 'YYYY/MM'
           }
+        },
+        {
+          type: 'string',
+          label: 'Credential URL',
+          name: 'url'
         }
       ]
     }
   ]
 }
 
-export default Awards
+export default Certs

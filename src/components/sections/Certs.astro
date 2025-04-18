@@ -1,0 +1,50 @@
+---
+import { Icon } from 'astro-icon/components'
+import Button from '@components/ui/Button.astro'
+import { formatDateToMonthYear } from '@utils/common'
+
+interface Props {
+  title?: string
+  desc?: string
+  items?: {
+    name: string
+    issuedBy: string
+    issueDate: string
+    url?: string
+  }[]
+}
+
+const { title, desc, items = [] } = Astro.props
+---
+
+<section class="mx-6 rounded-xl border border-neutral-200 bg-white md:mx-0" id="certs" data-in="zoomIn">
+  <div class="border-b border-neutral-200 p-6 md:p-8">
+    <div class="inline-block rounded-lg border border-neutral-200 bg-neutral-100 p-3">
+      <Icon name="certs" class="h-6 w-6" />
+    </div>
+    <h2 class="my-4 text-xl font-medium tracking-tight md:text-2xl">{title}</h2>
+    <p class="max-w-96 text-sm font-medium text-content">{desc}</p>
+  </div>
+
+  <div class="p-6 md:p-8">
+    <ul class="grid grid-cols-1 gap-8 text-xs font-medium text-content md:grid-cols-2">
+      {
+        items.map((item) => (
+          <li class="flex flex-col gap-1">
+            <h3 class="text-base font-medium text-primary">{item.name}</h3>
+            <p class="text-xs text-content">
+              {item.issuedBy} Issued {formatDateToMonthYear(item.issueDate)}
+            </p>
+            {item.url && (
+              <div class="mt-3 w-fit">
+                <Button href={item.url} icon="arrow-top-right" variant="secondary">
+                  Show Credentials
+                </Button>
+              </div>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

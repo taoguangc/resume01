@@ -14,11 +14,13 @@
         "@astrojs/rss": "^4.0.11",
         "@astrojs/sitemap": "^3.3.0",
         "@tailwindcss/vite": "^4.1.4",
+        "@types/nodemailer": "^6.4.17",
         "astro": "^5.7.4",
         "astro-icon": "^1.1.5",
         "embla-carousel": "^8.6.0",
         "lenis": "^1.2.3",
         "motion": "^12.7.4",
+        "nodemailer": "^6.10.1",
         "sharp": "^0.34.1",
         "tailwindcss": "^4.1.4",
         "tinacms": "^2.7.5"

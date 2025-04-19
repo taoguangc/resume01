@@ -4,6 +4,7 @@ import { getImage } from '@utils/image'
 import siteConfig from '@data/global/index.json'
 import { Icon } from 'astro-icon/components'
 import Button from '@components/ui/Button.astro'
+import { submitContactForm } from '@utils/contact'
 
 interface Props {
   title?: string
@@ -58,26 +59,63 @@ const getIconName = (path: string = '') => {
     <h3 class="my-2 text-xl font-medium">{msgTitle}</h3>
     <p class="max-w-96 text-sm font-medium text-content">{msgText}</p>
   </div>
-  <form class="grid grid-cols-1 gap-6 p-6 font-medium text-neutral-800">
+  <form
+    class="grid grid-cols-1 gap-6 p-6 font-medium text-neutral-800"
+    id="contact-form"
+    onsubmit="
+      event.preventDefault();
+      const form = event.target;
+      const submitBtn = form.querySelector('button[type=submit]');
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = '发送中...';
+
+      const formData = new FormData(form);
+      submitContactForm({
+        name: formData.get('name'),
+        email: formData.get('email'),
+        message: formData.get('message'),
+        to: props.email
+      })
+      .then(data => {
+        alert(data.message);
+        form.reset();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert(error.message || '发送失败，请稍后重试');
+      })
+      .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      });
+    "
+  >
     <input
       type="text"
       id="name"
+      name="name"
       class="w-full rounded-lg bg-neutral-100 px-4 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
       placeholder="Full Name"
+      required
     />
 
     <input
       type="email"
       id="email"
+      name="email"
       class="w-full rounded-lg bg-neutral-100 px-4 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
       placeholder="Email"
+      required
     />
 
     <textarea
       id="message"
+      name="message"
       rows="4"
       class="w-full rounded-lg bg-neutral-100 px-4 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
-      placeholder="Message"></textarea>
+      placeholder="Message"
+      required></textarea>
 
     <button type="submit" class="rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white hover:bg-gray-900 focus:outline-none"> Send Message </button>
   </form>

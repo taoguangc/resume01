@@ -234,6 +234,55 @@
         }
       ],
       "_template": "Awards"
+    },
+    {
+      "title": "Recommendations",
+      "desc": "Endorsements and testimonials highlighting professional aptitude and contributions from colleagues and partners.",
+      "items": [
+        {
+          "name": "Abby Nichols",
+          "position": "Data Engineer",
+          "date": "2023-10-17T16:00:00.000Z",
+          "content": "I am delighted to endorse Thomas Scott for his exemplary professionalism and remarkable contributions. Throughout our collaboration, Thomas consistently demonstrated a profound understanding of complex data dynamics and business intricacies.\n His innovative strategies and meticulous attention to detail have significantly elevated project outcomes. Thomas's dedication, coupled with his exceptional communication skills, makes him an invaluable asset to any endeavor."
+        },
+        {
+          "name": "Steve Anderson",
+          "position": "Data Scientist",
+          "date": "2022-11-17T16:00:00.000Z",
+          "content": "It is with great pleasure that I recommend Thomas Scott for his outstanding proficiency and unwavering commitment.\n Thomas's adeptness in navigating intricate data landscapes, coupled with his astute business acumen, has consistently resulted in strategic insights of immense value."
+        }
+      ],
+      "_template": "Recs"
+    },
+    {
+      "title": "Feel Free to Reach Out",
+      "desc": "Let's start a productive conversation",
+      "email": "taoguangc@gmail.com",
+      "items": [
+        {
+          "name": "LinkedIn",
+          "image": "/src/assets/icons/social-linkedin.svg",
+          "link": "https://www.linkedin.com/feed/"
+        },
+        {
+          "name": "Facebook",
+          "image": "/src/assets/icons/social-facebook.svg",
+          "link": "https://www.facebook.com/"
+        },
+        {
+          "name": "Telegram",
+          "image": "/src/assets/icons/social-telegram.svg",
+          "link": "https://telegram.org/"
+        },
+        {
+          "name": "X",
+          "image": "/src/assets/icons/social-x.svg",
+          "link": "https://x.com"
+        }
+      ],
+      "msgTitle": "Get in Touch with Me!",
+      "msgText": "Have a question, feedback, or just want to say hello? I'd love to hear from you! Your communication matters to me!\n",
+      "_template": "Contact"
     }
   ]
 }

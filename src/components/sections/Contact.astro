@@ -1,118 +1,84 @@
 ---
 import { Image } from 'astro:assets'
 import { getImage } from '@utils/image'
+import siteConfig from '@data/global/index.json'
+import { Icon } from 'astro-icon/components'
+import Button from '@components/ui/Button.astro'
 
 interface Props {
   title?: string
-  description?: string
-  image?: string
-  name?: string
+  desc?: string
   email?: string
-  phone?: string
-  date?: string
-  message?: string
-  content?: Array<{
-    title: string
-    icon?: string
-    text?: string
-    link?: string
+  items?: Array<{
+    name: string
+    image: string
+    link: string
   }>
+  msgTitle?: string
+  msgText?: string
 }
 
-const { title = '', description = '', image = '', name = '', email = '', phone = '', date = '', message = '', content = [] } = Astro.props
+const { title, desc, email, items = [], msgTitle, msgText } = Astro.props
 
-const props = Astro.props as Props
+const logo = siteConfig.logo
+const processedImage = logo ? await getImage(logo) : null
 
-// 统一处理所有图片
-const processImages = async (images: (string | undefined)[]) => {
-  return Promise.all(images.map((img) => (img ? getImage(img) : null)))
+const getIconName = (path: string = '') => {
+  return path.split('/').pop()?.replace('.svg', '') || ''
 }
-
-const processedImage = image ? await getImage(image) : null
 ---
 
-<section class="bg-white py-8 md:py-16">
-  <div class="container mx-auto px-4">
-    <!-- Contact Info Section -->
-    <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-      <!-- Clinic Contact -->
-      <div>
-        <div class="mb-3 flex items-center gap-2">
-          <div class="h-2 w-2 rounded-full bg-primary"></div>
-          <h3 class="text-sm text-primary">Contact</h3>
-        </div>
-        <hr class="mb-6 w-48 rounded border-2 border-primary" />
-        <h2 class="mb-8 text-3xl font-semibold md:text-4xl" data-in="wordFade">{title}</h2>
-        <h3 class="text-gray-600">{description}</h3>
+<section class="mt-10 flex flex-col items-center py-12" id="contact" data-in="zoomIn">
+  {
+    processedImage && (
+      <Image src={processedImage} alt={`${siteConfig.title} logo`} width="80" height="80" class="w-auto rounded-xl shadow-[0_6px_12px_0_rgba(29,29,38,0.1)]" />
+    )
+  }
+  <h2 class="mt-4 text-xl font-medium tracking-tight md:text-2xl">{title}</h2>
+  <h3 class="max-w-96 text-lg font-medium text-content">{desc}</h3>
+  <Button href={`mailto:${email}`} icon="email" class="mt-8 px-8 py-4 text-lg">Send Email</Button>
+  {
+    items.length > 0 && (
+      <div class="mt-8 flex justify-center space-x-6">
+        {items.map((item) => (
+          <a href={item.link} class="text-neutral-500 hover:text-neutral-600">
+            <Icon name={getIconName(item.image)} title={item.name} class="h-6 w-6" />
+          </a>
+        ))}
       </div>
+    )
+  }
+</section>
+
+<section class="mx-6 rounded-xl border border-neutral-200 bg-white md:mx-0">
+  <div class="border-b border-neutral-200 p-6">
+    <div class="mb-3 inline-block rounded-lg border border-neutral-200 bg-neutral-100 p-3">
+      <Icon name="write" class="h-6 w-6 text-content" />
     </div>
-
-    <div class="my-12 grid grid-cols-2 gap-4 md:grid-cols-4">
-      {
-        content &&
-          content.map((item) => (
-            <div class="flex flex-col">
-              <h3 class="mb-4 text-xl font-semibold">{item.title}</h3>
-              <div class="flex items-center gap-2">
-                {item.icon && <Fragment set:html={item.icon} />}
-                {item.link ? (
-                  <a href={item.link} class="text-gray-600 hover:text-primary">
-                    {item.text}
-                  </a>
-                ) : (
-                  <span class="text-gray-600">{item.text}</span>
-                )}
-              </div>
-            </div>
-          ))
-      }
-    </div>
-
-    <!-- Contact Form Section -->
-    <div class="grid grid-cols-1 gap-8">
-      <div class="flex flex-col">
-        <form class="flex flex-col gap-6">
-          <!-- Full Name Field -->
-          <div class="flex flex-col gap-2">
-            <input
-              type="text"
-              id="fullName"
-              name="fullName"
-              placeholder="Full Name"
-              class="rounded-full border border-gray-300 p-3 focus:border-primary focus:outline-none"
-              required
-            />
-          </div>
-
-          <!-- Email Field -->
-          <div class="flex flex-col gap-2">
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Email"
-              class="rounded-full border border-gray-300 p-3 focus:border-primary focus:outline-none"
-              required
-            />
-          </div>
-
-          <!-- Message Field -->
-          <div class="flex flex-col gap-2">
-            <textarea
-              id="message"
-              name="message"
-              rows="6"
-              placeholder="Message"
-              class="rounded-xl border border-gray-300 p-3 focus:border-primary focus:outline-none"
-              required></textarea>
-          </div>
-
-          <!-- Submit Button -->
-          <button type="submit" class="rounded-full bg-primary px-6 py-3 text-center font-medium text-white transition-all hover:bg-gray-500">
-            Send a Message
-          </button>
-        </form>
-      </div>
-    </div>
+    <h3 class="my-2 text-xl font-medium">{msgTitle}</h3>
+    <p class="max-w-96 text-sm font-medium text-content">{msgText}</p>
   </div>
+  <form class="grid grid-cols-1 gap-6 p-6 font-medium text-neutral-800">
+    <input
+      type="text"
+      id="name"
+      class="w-full rounded-lg bg-neutral-100 px-4 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
+      placeholder="Full Name"
+    />
+
+    <input
+      type="email"
+      id="email"
+      class="w-full rounded-lg bg-neutral-100 px-4 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
+      placeholder="Email"
+    />
+
+    <textarea
+      id="message"
+      rows="4"
+      class="w-full rounded-lg bg-neutral-100 px-4 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
+      placeholder="Message"></textarea>
+
+    <button type="submit" class="rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white hover:bg-gray-900 focus:outline-none"> Send Message </button>
+  </form>
 </section>

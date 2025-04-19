@@ -12,52 +12,50 @@ const Contact: Template = {
     {
       type: 'string',
       label: 'Description',
-      name: 'description'
-    },
-    {
-      type: 'string',
-      label: 'Full Name',
-      name: 'fullName',
-      required: true
+      name: 'desc'
     },
     {
       type: 'string',
       label: 'Email',
-      name: 'email',
-      required: true
-    },
-    {
-      type: 'string',
-      label: 'Message',
-      name: 'message',
-      required: true,
-      ui: {
-        component: 'textarea'
-      }
+      name: 'email'
     },
     {
       type: 'object',
-      label: 'content',
-      name: 'content',
+      label: 'Social Items',
+      name: 'items',
       list: true,
       ui: {
         itemProps: (item) => {
-          return { label: item?.title }
-        },
-        max: 4
+          return { label: item?.name }
+        }
       },
       fields: [
         {
           type: 'string',
-          label: 'Title',
-          name: 'title'
+          label: 'Social Name',
+          name: 'name'
         },
         {
-          type: 'rich-text',
-          label: 'Text',
-          name: 'text'
+          type: 'image',
+          label: 'Social Image',
+          name: 'image'
+        },
+        {
+          type: 'string',
+          label: 'Social Link',
+          name: 'link'
         }
       ]
+    },
+    {
+      type: 'string',
+      label: 'Message Title',
+      name: 'msgTitle'
+    },
+    {
+      type: 'rich-text',
+      label: 'Message Text',
+      name: 'msgText'
     }
   ]
 }

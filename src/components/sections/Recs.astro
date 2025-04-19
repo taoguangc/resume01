@@ -1,0 +1,45 @@
+---
+import { Icon } from 'astro-icon/components'
+import { formatDateToMonthYear } from '@utils/common'
+
+interface Props {
+  title?: string
+  desc?: string
+  items?: {
+    name: string
+    position: string
+    date: string
+    content: string
+  }[]
+}
+
+const { title, desc, items = [] } = Astro.props
+---
+
+<section class="mx-6 rounded-xl border border-neutral-200 bg-white md:mx-0" id="recommendations" data-in="zoomIn">
+  <div class="border-b border-neutral-200 p-6">
+    <div class="inline-block rounded-lg border border-neutral-200 bg-neutral-100 p-3">
+      <Icon name="recs" class="h-6 w-6" />
+    </div>
+    <h2 class="my-4 text-xl font-medium tracking-tight md:text-2xl">{title}</h2>
+    <p class="max-w-96 text-sm font-medium text-content">{desc}</p>
+  </div>
+
+  <div class="p-6">
+    <ul class="grid grid-cols-1 gap-8 text-xs font-medium text-content">
+      {
+        items.map((item) => (
+          <li class="relative pl-4 before:absolute before:top-0 before:left-0 before:h-full before:w-0.5 odd:before:bg-emerald-500 even:before:bg-blue-500">
+            <div class="flex flex-col gap-1">
+              <h3 class="text-base font-medium text-primary">{item.name}</h3>
+              <p class="text-xs text-content">
+                {item.position} · {formatDateToMonthYear(item.date)}
+              </p>
+              <p class="mt-3 text-xs/5 text-content">{item.content}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

@@ -8,6 +8,8 @@ import Certs from '../sections/certs'
 import Skills from '../sections/skills'
 import Languages from '../sections/languages'
 import Awards from '../sections/awards'
+import Recs from '../sections/recs'
+import Contact from '../sections/contact'
 
 const Home: Collection = {
   label: 'Home',
@@ -86,7 +88,7 @@ const Home: Collection = {
       ui: {
         visualSelector: true
       },
-      templates: [Hero, Marquee, Profile, Experience, Education, Certs, Skills, Languages, Awards]
+      templates: [Hero, Marquee, Profile, Experience, Education, Certs, Skills, Languages, Awards, Recs, Contact]
     }
   ]
 }
